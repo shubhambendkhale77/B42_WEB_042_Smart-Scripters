@@ -1,12 +1,13 @@
-function App() {
+import Navbar from "./components/Navbar";
+import AppRoutes from "./routers/AppRoutes";
 
+function App() {
   return (
     <>
-   <div>
-    <h1 >E-Card</h1>
-   </div>
+      <Navbar />
+      <AppRoutes />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
