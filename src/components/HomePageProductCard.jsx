@@ -1,26 +1,24 @@
-import { useNavigate } from "react-router";
 import { useContext } from "react";
+import { useNavigate } from "react-router";
 import { AuthContext } from "../context/useAuth";
 
-
-const AllProduct = () => {
+const HomePageProductCard = () => {
     const navigate = useNavigate();
 
-    const context = useContext(AuthContext);
+    const context = useContext(AuthContext)
     const {getAllProduct} = context;
     return (
-        <>
-    <div className="py-8">
+        <div className="mt-10">
             {/* Heading  */}
             <div className="">
-                <h1 className=" text-center mb-5 text-2xl font-semibold">All Products</h1>
+                <h1 className=" text-center mb-5 text-2xl font-semibold">Bestselling Products</h1>
             </div>
 
             {/* main  */}
             <section className="text-gray-600 body-font">
-                <div className="container px-5 lg:px-0 py-5 mx-auto">
+                <div className="container px-5 py-5 mx-auto">
                     <div className="flex flex-wrap -m-4">
-                    {getAllProduct.map((item, index) => {
+                        {getAllProduct.slice(0,8).map((item, index) => {
                             const { id, title, price,productImageUrl } = item
                             return (
                                 <div key={index} className="p-4 w-full md:w-1/4">
@@ -33,7 +31,7 @@ const AllProduct = () => {
                                         />
                                         <div className="p-6">
                                             <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
-                                                E-bharat
+                                                ShopSmart
                                             </h2>
                                             <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
                                                 {title.substring(0, 25)}
@@ -56,8 +54,7 @@ const AllProduct = () => {
                 </div>
             </section>
         </div>
-        </>
     );
 }
 
-export default AllProduct;
+export default HomePageProductCard;
