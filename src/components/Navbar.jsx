@@ -5,26 +5,6 @@ import {FiSearch,FiUser,FiShoppingCart,FiHeart,FiHome,FiPackage,FiSun,FiMoon,FiX
 } from "react-icons/fi";
 
 const Navbar = () => {
-  const [isDark, setIsDark] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const location = useLocation();
-
-  const navLinks = [
-    { path: "/", name: "Home", icon: <FiHome /> },
-    { path: "/products", name: "Products", icon: <FiPackage /> },
-    { path: "/wishlist", name: "Wishlist", icon: <FiHeart /> },
-    { path: "/cart", name: "Cart", icon: <FiShoppingCart /> },
-    { path: "/orders", name: "Orders", icon: <FiPackage /> },
-    { path: "/login", name: "Login", icon: <FiUser /> },
-    { path: "/register", name: "Register", icon: <FiUser /> },
-  ];
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle("dark");
-  };
-
   return (
     <>
       {/* Desktop/Tablet Navigation */}
