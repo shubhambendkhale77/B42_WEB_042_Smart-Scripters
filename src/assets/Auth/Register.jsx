@@ -9,6 +9,9 @@ import { setDoc, doc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Mail, Check, Lock, User, UserPlus, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+
 
 const registerSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -22,6 +25,7 @@ const registerSchema = z.object({
       "Password must include uppercase, lowercase, number, and special character"
     ),
 });
+
 
 const Register = () => {
   const {
@@ -53,7 +57,11 @@ const Register = () => {
         toast.success("Registration Successful!", {
           position: "top-right",
         });
+
         reset();
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       }
     } catch (error) {
       toast.error(error.message, {
@@ -61,6 +69,7 @@ const Register = () => {
       });
     }
   };
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
@@ -77,19 +86,27 @@ const Register = () => {
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
               <Check className="w-5 h-5" />
             </div>
-            <p className="flex-1">Simplify your shopping experience with intuitive account controls.</p>
+            <p className="flex-1">
+              Simplify your shopping experience with intuitive account controls.
+            </p>
           </div>
           <div className="flex items-start space-x-4">
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
               <Check className="w-5 h-5" />
             </div>
-            <p className="flex-1">Your information is protected with industry-leading security measures.</p>
+            <p className="flex-1">
+              Your information is protected with industry-leading security
+              measures.
+            </p>
           </div>
           <div className="flex items-start space-x-4">
             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
               <Check className="w-5 h-5" />
             </div>
-            <p className="flex-1">Our support team is here for you 24/7, ready to assist with any queries or concerns.</p>
+            <p className="flex-1">
+              Our support team is here for you 24/7, ready to assist with any
+              queries or concerns.
+            </p>
           </div>
         </div>
       </div>
@@ -264,8 +281,8 @@ const Register = () => {
       </div>
 
       <ToastContainer
-        position="top-right"
-        autoClose={5000}
+        position="center"
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
