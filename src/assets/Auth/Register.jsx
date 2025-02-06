@@ -118,9 +118,9 @@ const Register = () => {
           <div className="lg:hidden">
             <button
               onClick={() => window.history.back()}
-              className="flex items-center text-gray-600 hover:text-gray-900"
+              className=" cursor-pointer flex items-center text-gray-600 hover:text-gray-900"
             >
-              <ArrowLeft className="w-5 h-5 mr-2" />
+              <ArrowLeft className="cursor-pointer w-5 h-5 mr-2" />
               Back
             </button>
           </div>
@@ -231,13 +231,13 @@ const Register = () => {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg transition duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 hover:shadow-lg"
+                className=" cursor-pointer w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg transition duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 hover:shadow-lg"
               >
                 {isSubmitting ? (
-                  <div className="animate-spin h-5 w-5 border-t-2 border-white rounded-full"></div>
+                  <div className="cursor-pointer animate-spin h-5 w-5 border-t-2 border-white rounded-full"></div>
                 ) : (
                   <>
-                    <UserPlus className="w-5 h-5" />
+                    <UserPlus className="cursor-pointer w-5 h-5" />
                     <span>Create Account</span>
                   </>
                 )}
