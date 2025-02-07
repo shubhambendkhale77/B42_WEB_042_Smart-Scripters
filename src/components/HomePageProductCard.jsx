@@ -25,6 +25,10 @@ const HomePageProductCard = () => {
   };
 
   useEffect(() => {
+    console.log("homePageproduct component rendered");
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
