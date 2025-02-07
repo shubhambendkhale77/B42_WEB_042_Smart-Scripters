@@ -12,6 +12,8 @@ import AdminDashboard from "../pages/AdminDashboard";
 import AddProductPage from "../pages/AddProductPage";
 import UpdateProductPage from "../pages/UpdateProductPage";
 import CategoryPage from "../pages/CategoryPage";
+import Wishlist from "../pages/Wishlist";
+import OrderTracker from "../pages/OrderTracker";
 
 const AppRoutes = () => {
   return (
@@ -21,6 +23,8 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/products" element={<PrivateRoute element={<Product />}/>} />
       <Route path="/productinfo/:id" element={<ProductInfo />} />
+      <Route path="/wishlist" element={<Wishlist/>}/>
+      <Route path="/productinfo" element={<ProductInfo />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/user-dashboard" element={<UserDashBoard />} />
