@@ -11,7 +11,11 @@ import UserDashBoard from "../pages/UserDashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 import AddProductPage from "../pages/AddProductPage";
 import UpdateProductPage from "../pages/UpdateProductPage";
+<<<<<<< HEAD
 import Wishlist from "../pages/Wishlist";
+=======
+import OrderTracker from "../pages/OrderTracker";
+>>>>>>> ac9b8dd07cc4b06a5826a283e074c5b3b25f07a4
 
 const AppRoutes = () => {
   return (
@@ -26,6 +30,7 @@ const AppRoutes = () => {
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/user-dashboard" element={<UserDashBoard />} />
       <Route path="/addproduct"  element={<AddProductPage />}  />
+      <Route path="/tracker"  element={<OrderTracker />}  />
       <Route path="/updateproduct/:id"element={<UpdateProductPage />} />
     </Routes>
   );
