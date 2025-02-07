@@ -2,7 +2,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import ProductDetail from "../components/admin/ProductDetail";
 import OrderDetail from "../components/admin/OrderDetail";
 import UserDetail from "../components/admin/UserDetail";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { db } from "../assets/Auth/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
@@ -13,28 +13,27 @@ const AdminDashboard = () => {
   // Fetch Admin Details
   useEffect(() => {
     setAdmin({
-      email: localStorage.getItem("adminEmail") || "Aayush.admin.gmail.com",
+      email: localStorage.getItem("adminEmail") || "Aayush.admin@gmail.com",
       name: localStorage.getItem("adminName") || "Aayush Pandey",
     });
   }, []);
 
   // Fetch Total Number of Products
-  useEffect(() => {
-    const fetchProductsCount = async () => {
-      try {
-        const productsSnapshot = await getDocs(collection(db, "products"));
-        const newTotalProducts = productsSnapshot.size;
-  
-        // Prevent unnecessary state updates
-        setTotalProducts((prev) => (prev !== newTotalProducts ? newTotalProducts : prev));
-        
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-  
-    fetchProductsCount();
+  const fetchProductsCount = useCallback(async () => {
+    try {
+      const productsSnapshot = await getDocs(collection(db, "products"));
+      const newTotalProducts = productsSnapshot.size;
+      setTotalProducts((prev) =>
+        prev !== newTotalProducts ? newTotalProducts : prev
+      );
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchProductsCount();
+  }, [fetchProductsCount]);
 
   return (
     <div>
@@ -75,9 +74,6 @@ const AdminDashboard = () => {
               {/* Total Products Tab */}
               <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer react-tabs__tab">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
-                  <div className="text-pink-500 w-12 h-12 mb-3 inline-block">
-                    🛒
-                  </div>
                   <h2 className="title-font font-medium text-3xl text-pink-400">
                     {totalProducts}
                   </h2>
@@ -88,9 +84,6 @@ const AdminDashboard = () => {
               {/* Total Orders Tab */}
               <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer react-tabs__tab">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
-                  <div className="text-pink-500 w-12 h-12 mb-3 inline-block">
-                    📦
-                  </div>
                   <h2 className="title-font font-medium text-3xl text-pink-400">
                     10
                   </h2>
@@ -101,9 +94,6 @@ const AdminDashboard = () => {
               {/* Total Users Tab */}
               <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer react-tabs__tab">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
-                  <div className="text-pink-500 w-12 h-12 mb-3 inline-block">
-                    👥
-                  </div>
                   <h2 className="title-font font-medium text-3xl text-pink-400">
                     10
                   </h2>
