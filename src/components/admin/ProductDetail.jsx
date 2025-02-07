@@ -1,6 +1,8 @@
 import { useContext, useEffect} from "react";
 import { AuthContext } from "../../context/useAuth";
 import { Link, useNavigate } from "react-router-dom";
+import { db } from "../../assets/Auth/firebase";
+import { deleteDoc, doc } from "firebase/firestore";
 
 
 const ProductDetail = () => {
@@ -9,6 +11,23 @@ const ProductDetail = () => {
     useEffect(() => {
         getAllProductFunction();
     }, [getAllProductFunction]);
+    
+        useEffect(() => {
+          console.log("ProductDetail component rendered");
+        }, []);
+
+    const deleteProduct = async (id) => {
+        // setLoading(true)
+        try {
+            await deleteDoc(doc(db, 'products', id))
+            toast.success('Product Deleted successfully')
+            getAllProductFunction();
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            // setLoading(false)
+        }
+    }
 
     return (
         <div>
@@ -67,7 +86,9 @@ const ProductDetail = () => {
                                     className="h-12 px-6 text-md border-t border-l first:border-l-0 border-pink-100 text-green-500 cursor-pointer">
                                         Edit
                                     </td>
-                                    <td className="h-12 px-6 text-md border-t border-l first:border-l-0 border-pink-100 text-red-500 cursor-pointer">
+                                    <td 
+                                    onClick={()=>deleteProduct(id)}
+                                    className="h-12 px-6 text-md border-t border-l first:border-l-0 border-pink-100 text-red-500 cursor-pointer">
                                         Delete
                                     </td>
                                 </tr>

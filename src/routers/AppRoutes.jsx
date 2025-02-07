@@ -11,6 +11,7 @@ import UserDashBoard from "../pages/UserDashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 import AddProductPage from "../pages/AddProductPage";
 import UpdateProductPage from "../pages/UpdateProductPage";
+import CategoryPage from "../pages/CategoryPage";
 
 const AppRoutes = () => {
   return (
@@ -19,12 +20,13 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/products" element={<PrivateRoute element={<Product />}/>} />
-      <Route path="/productinfo" element={<ProductInfo />} />
+      <Route path="/productinfo/:id" element={<ProductInfo />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/user-dashboard" element={<UserDashBoard />} />
       <Route path="/addproduct"  element={<AddProductPage />}  />
       <Route path="/updateproduct/:id"element={<UpdateProductPage />} />
+      <Route path="/category/:categoryname" element={<CategoryPage/>}/>
     </Routes>
   );
 };
