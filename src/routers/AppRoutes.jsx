@@ -11,11 +11,7 @@ import UserDashBoard from "../pages/UserDashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 import AddProductPage from "../pages/AddProductPage";
 import UpdateProductPage from "../pages/UpdateProductPage";
-<<<<<<< HEAD
-// import Wishlist from "../pages/Wishlist";
-=======
-import OrderTracker from "../pages/OrderTracker";
->>>>>>> ac9b8dd07cc4b06a5826a283e074c5b3b25f07a4
+import Wishlist from "../pages/Wishlist";
 
 const AppRoutes = () => {
   return (
