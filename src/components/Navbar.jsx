@@ -110,7 +110,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden fixed bottom-0 w-full bg-gradient-to-r from-gray-900 to-gray-600 border-t border-gray-200 dark:border-gray-800 z-50">
+      <nav className="md:hidden fixed top-0 w-full bg-gradient-to-r from-gray-900 to-gray-600 border-t border-gray-200 dark:border-gray-800 z-50">
         <div className="relative flex justify-around items-center p-2">
           {navLinks.slice(0, 4).map((link) => (
             <NavLink

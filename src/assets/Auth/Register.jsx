@@ -51,6 +51,7 @@ const Register = () => {
           email: user.email,
           firstName: data.firstName,
           lastName: data.lastName,
+          role:'admin',
           createdAt: new Date().toISOString(),
         });
 

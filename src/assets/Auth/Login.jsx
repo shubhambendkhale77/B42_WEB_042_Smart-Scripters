@@ -28,12 +28,14 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      await signInWithEmailAndPassword(auth, data.email, data.password);
+      const result = await signInWithEmailAndPassword(auth, data.email, data.password);
       toast.success("Login Successful!", {
         position: "top-center",
         icon: <Check className="text-green-500" />
       });
-      
+      localStorage.setItem('user', JSON.stringify(result))
+      console.log(result)
+      navigate('/')
       
     } catch (error) {
       toast.error("Invalid User", {
