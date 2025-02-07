@@ -11,6 +11,7 @@ import UserDashBoard from "../pages/UserDashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 import AddProductPage from "../pages/AddProductPage";
 import UpdateProductPage from "../pages/UpdateProductPage";
+import OrderTracker from "../pages/OrderTracker";
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/user-dashboard" element={<UserDashBoard />} />
       <Route path="/addproduct"  element={<AddProductPage />}  />
+      <Route path="/tracker"  element={<OrderTracker />}  />
       <Route path="/updateproduct/:id"element={<UpdateProductPage />} />
     </Routes>
   );
