@@ -18,17 +18,19 @@ const AdminDashboard = () => {
     });
   }, []);
 
-  // Fetch Total Products - Use useCallback to prevent re-creation
+  // Fetch Total Number of Products
   const fetchProductsCount = useCallback(async () => {
     try {
       const productsSnapshot = await getDocs(collection(db, "products"));
-      setTotalProducts(productsSnapshot.size);
+      const newTotalProducts = productsSnapshot.size;
+      setTotalProducts((prev) =>
+        prev !== newTotalProducts ? newTotalProducts : prev
+      );
     } catch (error) {
       console.error("Error fetching products:", error);
     }
   }, []);
 
-  // Call fetchProductsCount Once
   useEffect(() => {
     fetchProductsCount();
   }, [fetchProductsCount]);
@@ -72,8 +74,9 @@ const AdminDashboard = () => {
               {/* Total Products Tab */}
               <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer react-tabs__tab">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
-                  <div className="text-pink-500 w-12 h-12 mb-3 inline-block">🛒</div>
-                  <h2 className="title-font font-medium text-3xl text-pink-400">{totalProducts}</h2>
+                  <h2 className="title-font font-medium text-3xl text-pink-400">
+                    {totalProducts}
+                  </h2>
                   <p className="text-pink-500 font-bold">Total Products</p>
                 </div>
               </Tab>
@@ -81,8 +84,9 @@ const AdminDashboard = () => {
               {/* Total Orders Tab */}
               <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer react-tabs__tab">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
-                  <div className="text-pink-500 w-12 h-12 mb-3 inline-block">📦</div>
-                  <h2 className="title-font font-medium text-3xl text-pink-400">10</h2>
+                  <h2 className="title-font font-medium text-3xl text-pink-400">
+                    10
+                  </h2>
                   <p className="text-pink-500 font-bold">Total Orders</p>
                 </div>
               </Tab>
@@ -90,8 +94,9 @@ const AdminDashboard = () => {
               {/* Total Users Tab */}
               <Tab className="p-4 md:w-1/3 sm:w-1/2 w-full cursor-pointer react-tabs__tab">
                 <div className="border bg-pink-50 hover:bg-pink-100 border-pink-100 px-4 py-3 rounded-xl">
-                  <div className="text-pink-500 w-12 h-12 mb-3 inline-block">👥</div>
-                  <h2 className="title-font font-medium text-3xl text-pink-400">10</h2>
+                  <h2 className="title-font font-medium text-3xl text-pink-400">
+                    10
+                  </h2>
                   <p className="text-pink-500 font-bold">Total Users</p>
                 </div>
               </Tab>
