@@ -34,9 +34,9 @@ const Navbar = () => {
           className="flex items-center space-x-4"
         >
           <img
-            src="https://i.ibb.co/qYsh2d3q/image-removebg-preview-1.png"
-            alt="Logo"
-            className="h-8 w-auto hover:rotate-12 transition-transform"
+            src={logo}
+            alt="Shoporia Logo"
+            className="h-6 md:h-30 max-w-[300px] object-contain hover:rotate-12 transition-transform"
           />
         </motion.div>
 
@@ -54,7 +54,7 @@ const Navbar = () => {
 
           {searchQuery && (
             <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-              {/* Auto-suggest items here */}
+              {}
             </div>
           )}
         </div>
