@@ -22,7 +22,7 @@ const Login = () => {
     try {
       if (loginType === 'admin') {
         // Admin login with hardcoded credentials
-        if (email === 'admin@admin.com' && password === 'admin123') {
+        if (email === 'shubham@admin.com' && password === 'shubham123') {
           localStorage.setItem('isAdmin', 'true');
           localStorage.setItem('adminToken', 'admin-token-123');
           navigate('/admin-dashboard');
