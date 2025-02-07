@@ -9,12 +9,16 @@ import {
   FiPackage,
   FiMenu,
 } from "react-icons/fi";
-import { FaRegUser } from "react-icons/fa";
+import { FaRegUser, FaSignOutAlt } from "react-icons/fa";
+
+// add custom Hook
+import useLogout from "../../hooks/useLogout";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
+  const logout = useLogout();
 
   // Check if user is admin
   const isAdmin = localStorage.getItem("isAdmin") === "true";
@@ -34,18 +38,18 @@ const Navbar = () => {
       return [
         ...commonLinks,
         { path: "/admin-dashboard", name: "Admin", icon: <FaRegUser /> },
+        { path: "#", name: "Logout", icon: <FaSignOutAlt />, onClick: logout },
       ];
     } else if (isAuthenticated) {
       return [
         ...commonLinks,
         { path: "/orders", name: "Orders", icon: <FiPackage /> },
         { path: "/user-dashboard", name: "Profile", icon: <FaRegUser /> },
+        { path: "#", name: "Logout", icon: <FaSignOutAlt />, onClick: logout },
       ];
     } else {
       return [
         ...commonLinks,
-        { path: "/user-dashboard", name: "Profile", icon: <FaRegUser /> },
-
         { path: "/login", name: "Login", icon: <FiUser /> },
         { path: "/register", name: "Register", icon: <FiUser /> },
       ];
@@ -98,6 +102,7 @@ const Navbar = () => {
                     : "text-gray-600 dark:text-gray-300"
                 }`
               }
+              onClick={link.onClick}
             >
               {({ isActive }) => (
                 <>
