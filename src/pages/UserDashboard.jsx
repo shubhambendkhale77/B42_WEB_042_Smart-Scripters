@@ -16,7 +16,9 @@ const products = [
 ];
 
 const UserDashboard = () => {
-  const { currentUser } = useAuth();
+  const { currentUser ,getAllProduct} = useAuth();
+
+  const username = currentUser.email.split('@')[0];
   return (
     <>
       <div className=" container mx-auto px-4 py-5 lg:py-8">
@@ -34,7 +36,7 @@ const UserDashboard = () => {
             {/* text  */}
             <div className="">
               <h1 className=" text-center text-lg">
-                <span className=" font-bold">Name :</span> {currentUser.name}{" "}
+                <span className=" font-bold">Name :</span> {username}{" "}
               </h1>
               <h1 className=" text-center text-lg">
                 <span className=" font-bold">Email :</span> {currentUser.email}
