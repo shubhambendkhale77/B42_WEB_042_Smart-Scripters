@@ -1,4 +1,9 @@
+import { useEffect } from "react";
+
 const UserDetail = () => {
+    useEffect(()=>{
+        console.log("userdetils")
+    },[])
     return (
         <div>
                <div>

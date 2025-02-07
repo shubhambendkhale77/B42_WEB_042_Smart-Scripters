@@ -1,197 +1,187 @@
-import { Timestamp, addDoc, collection } from "firebase/firestore";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { db } from "../assets/Auth/firebase";
-import { useNavigate } from "react-router";
-
+import React, { useState } from 'react';
+import { Timestamp, addDoc, collection } from 'firebase/firestore';
+import { useNavigate } from 'react-router';
+import { db } from '../assets/Auth/firebase';
+import toast from 'react-hot-toast';
+import { Image, IndianRupee , Tag, FileText, Plus } from 'lucide-react';
 
 const categoryList = [
-    {
-        name: 'fashion'
-    },
-    {
-        name: 'shirt'
-    },
-    {
-        name: 'jacket'
-    },
-    {
-        name: 'mobile'
-    },
-    {
-        name: 'laptop'
-    },
-    {
-        name: 'shoes'
-    },
-    {
-        name: 'home'
-    },
-    {
-        name: 'books'
-    }
-]
+    { name: 'fashion' },
+    { name: 'shirt' },
+    { name: 'jacket' },
+    { name: 'mobile' },
+    { name: 'laptop' },
+    { name: 'shoes' },
+    { name: 'home' },
+    { name: 'books' }
+];
 
 const AddProductPage = () => {
-
-
-    // navigate 
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
-    // product state
     const [product, setProduct] = useState({
-        title: "",
-        price: "",
-        productImageUrl: "",
-        category: "",
-        description: "",
-        quantity : 1,
+        title: '',
+        price: '',
+        productImageUrl: '',
+        category: '',
+        description: '',
+        quantity: 1,
         time: Timestamp.now(),
-        date: new Date().toLocaleString(
-            "en-US",
-            {
-                month: "short",
-                day: "2-digit",
-                year: "numeric",
-            }
-        )
+        date: new Date().toLocaleString('en-US', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+        })
     });
 
-
-    // Add Product Function
     const addProductFunction = async () => {
-        if (product.title == "" || product.price == "" || product.productImageUrl == "" || product.category == "" || product.description == "") {
-            return toast.error("all fields are required")
+        if (!product.title || !product.price || !product.productImageUrl || !product.category || !product.description) {
+            return toast.error('All fields are required');
         }
 
-        
+        setLoading(true);
         try {
             const productRef = collection(db, 'products');
-            await addDoc(productRef, product)
-            toast.success("Add product successfully");
-            navigate('/admin-dashboard')
-            
+            await addDoc(productRef, product);
+            toast.success('Product added successfully');
+            navigate('/admin-dashboard');
         } catch (error) {
             console.log(error);
-            
-            toast.error("Add product failed");
+            toast.error('Failed to add product');
+        } finally {
+            setLoading(false);
         }
+    };
 
-    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setProduct(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     return (
-        <div>
-            <div className='flex justify-center items-center h-screen'>
-                {/* {loading && <Loader />} */}
-                {/* Login Form  */}
-                <div className="login_Form bg-pink-50 px-8 py-6 border border-pink-100 rounded-xl shadow-md">
-
-                    {/* Top Heading  */}
-                    <div className="mb-5">
-                        <h2 className='text-center text-2xl font-bold text-pink-500 '>
-                            Add Product
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
+                        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                            <Plus className="w-6 h-6" />
+                            Add New Product
                         </h2>
+                        <p className="text-blue-100 mt-1">Fill in the information below to add a new product</p>
                     </div>
 
-                    {/* Input One  */}
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            name="title"
-                            value={product.title}
-                            onChange={(e) => {
-                                setProduct({
-                                    ...product,
-                                    title: e.target.value
-                                })
-                            }}
-                            placeholder='Product Title'
-                            className='bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300'
-                        />
-                    </div>
+                    {/* Form */}
+                    <div className="px-8 py-6 space-y-6">
+                        {/* Title Input */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                <Tag className="w-4 h-4" />
+                                Product Title
+                            </label>
+                            <input
+                                type="text"
+                                name="title"
+                                value={product.title}
+                                onChange={handleInputChange}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                placeholder="Enter product title"
+                            />
+                        </div>
 
-                    {/* Input Two  */}
-                    <div className="mb-3">
-                        <input
-                            type="number"
-                            name="price"
-                            value={product.price}
-                            onChange={(e) => {
-                                setProduct({
-                                    ...product,
-                                    price: e.target.value
-                                })
-                            }}
-                            placeholder='Product Price'
-                            className='bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300'
-                        />
-                    </div>
+                        {/* Price & Category Group */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Price Input */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                    <IndianRupee  className="w-4 h-4" />
+                                    Price
+                                </label>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    value={product.price}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                    placeholder="Enter price"
+                                />
+                            </div>
 
-                    {/* Input Three  */}
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            name="productImageUrl"
-                            value={product.productImageUrl}
-                            onChange={(e) => {
-                                setProduct({
-                                    ...product,
-                                    productImageUrl: e.target.value
-                                })
-                            }}
-                            placeholder='Product Image Url'
-                            className='bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300'
-                        />
-                    </div>
+                            {/* Category Select */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700">Category</label>
+                                <select
+                                    name="category"
+                                    value={product.category}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors capitalize"
+                                >
+                                    <option value="">Select Category</option>
+                                    {categoryList.map(({ name }, index) => (
+                                        <option key={index} value={name} className="capitalize">
+                                            {name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
 
-                    {/* Input Four  */}
-                    <div className="mb-3">
-                        <select
-                            value={product.category}
-                            onChange={(e) => {
-                                setProduct({
-                                    ...product,
-                                    category: e.target.value
-                                })
-                            }}
-                            className="w-full px-1 py-2 text-pink-300 bg-pink-50 border border-pink-200 rounded-md outline-none  ">
-                            <option disabled>Select Product Category</option>
-                            {categoryList.map((value, index) => {
-                                const { name } = value
-                                return (
-                                    <option className=" first-letter:uppercase" key={index} value={name}>{name}</option>
-                                )
-                            })}
-                        </select>
-                    </div>
+                        {/* Image URL Input */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                <Image className="w-4 h-4" />
+                                Image URL
+                            </label>
+                            <input
+                                type="text"
+                                name="productImageUrl"
+                                value={product.productImageUrl}
+                                onChange={handleInputChange}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                placeholder="Enter image URL"
+                            />
+                        </div>
 
-                    {/* Input Five  */}
-                    <div className="mb-3">
-                        <textarea
-                            value={product.description}
-                            onChange={(e) => {
-                                setProduct({
-                                    ...product,
-                                    description: e.target.value
-                                })
-                            }} name="description" placeholder="Product Description" rows="5" className=" w-full px-2 py-1 text-pink-300 bg-pink-50 border border-pink-200 rounded-md outline-none placeholder-pink-300 ">
+                        {/* Description Textarea */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                <FileText className="w-4 h-4" />
+                                Description
+                            </label>
+                            <textarea
+                                name="description"
+                                value={product.description}
+                                onChange={handleInputChange}
+                                rows="4"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                                placeholder="Enter product description"
+                            />
+                        </div>
 
-                        </textarea>
-                    </div>
-
-                    {/* Add Product Button  */}
-                    <div className="mb-3">
+                        {/* Submit Button */}
                         <button
                             onClick={addProductFunction}
-                            type='button'
-                            className='bg-pink-500 hover:bg-pink-600 w-full text-white text-center py-2 font-bold rounded-md '
+                            disabled={loading}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
                         >
-                            Add Product
+                            {loading ? (
+                                <span>Adding Product...</span>
+                            ) : (
+                                <>
+                                    <Plus className="w-5 h-5" />
+                                    Add Product
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default AddProductPage;

@@ -1,4 +1,8 @@
 const OrderDetail = () => {
+
+        useEffect(()=>{
+            console.log("Order")
+        },[])
     return (
         <div>
                <div>
