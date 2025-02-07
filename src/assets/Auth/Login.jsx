@@ -1,166 +1,136 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Mail, Lock, LogIn, Eye, EyeOff, Check } from "lucide-react";
-
-
-const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters")
-});
+// Login.js
+import React, { useState } from 'react';
+import { Eye, EyeOff, Mail, Lock, LogIn, User, Shield } from 'lucide-react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebase';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const {
-    register, 
-    handleSubmit, 
-    formState: { errors, isSubmitting }
-  } = useForm({
-    resolver: zodResolver(loginSchema)
-  });
-
-  const onSubmit = async (data) => {
-    try {
-      await signInWithEmailAndPassword(auth, data.email, data.password);
-      toast.success("Login Successful!", {
-        position: "top-center",
-        icon: <Check className="text-green-500" />
-      });
-      
-      
-    } catch (error) {
-      toast.error("Invalid User", {
-        position: "top-center"
-      });
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [loginType, setLoginType] = useState('user'); // 'user' or 'admin'
   const navigate = useNavigate();
 
-  const navigateToSignup = () => {
-    navigate("/signup");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      if (loginType === 'admin') {
+        // Admin login with hardcoded credentials
+        if (email === 'admin@admin.com' && password === 'admin123') {
+          localStorage.setItem('isAdmin', 'true');
+          localStorage.setItem('adminToken', 'admin-token-123');
+          navigate('/admin-dashboard');
+        } else {
+          throw new Error('Invalid Admin');
+        }
+      } else {
+        // User login with Firebase
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        localStorage.setItem('userToken', user.accessToken);
+        navigate('/user-dashboard');
+      }
+    } catch (error) {
+      setError(loginType === 'admin' ? 'Invalid Admin' : 'Invalid User');
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden"
-      >
-        <div className="px-10 py-12 space-y-8">
-          <motion.h2 
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+        <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Welcome Back
+        </h2>
+
+        <div className="flex gap-4 mb-8">
+          <button
+            onClick={() => setLoginType('user')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-colors ${
+              loginType === 'user'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
           >
-            Welcome Back
-          </motion.h2>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <motion.div 
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="relative"
-            >
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="text-gray-400 w-5 h-5" />
-              </div>
-              <input
-                type="email"
-                {...register("email")}
-                placeholder="Email Address"
-                className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition duration-300 ${
-                  errors.email 
-                    ? "border-red-500 focus:ring-red-500" 
-                    : "border-gray-300 focus:ring-blue-500"
-                }`}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.email.message}
-                </p>
-              )}
-            </motion.div>
-
-            <motion.div 
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="relative"
-            >
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="text-gray-400 w-5 h-5" />
-              </div>
-              <input
-                type={showPassword ? "text" : "password"}
-                {...register("password")}
-                placeholder="Password"
-                className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:ring-2 transition duration-300 ${
-                  errors.password
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:ring-blue-500"
-                }`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-blue-600"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
-              )}
-            </motion.div>
-
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              type="submit" 
-              disabled={isSubmitting}
-              className=" cursor-pointer w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:opacity-90 transition duration-300 flex items-center justify-center space-x-2 disabled:opacity-50"
-            >
-              {isSubmitting ? (
-                <div className="animate-spin h-5 w-5 border-t-2 border-white rounded-full"></div>
-              ) : (
-                <>
-                  <LogIn className="w-5 h-5" />
-                  <span className="cursor-pointer">Login</span>
-                </>
-              )}
-            </motion.button>
-          </form>
-
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-center space-y-4"
+            <User size={20} />
+            User
+          </button>
+          <button
+            onClick={() => setLoginType('admin')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-colors ${
+              loginType === 'admin'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
           >
-            <a 
-              href="/forgot-password" 
-              className="text-sm text-blue-600 hover:underline"
-            >
-              Forgot Password?
-            </a>
-            <p className="text-sm text-gray-600 cursor-pointer">
-              Don't have an account? <a onClick={navigateToSignup} className="text-blue-600 hover:underline">Sign Up</a>
-            </p>
-          </motion.div>
+            <Shield size={20} />
+            Admin
+          </button>
         </div>
-      </motion.div>
-      <ToastContainer />
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Mail className="text-gray-400" size={20} />
+            </div>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={`${loginType === 'admin' ? 'Admin' : 'User'} Email`}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Lock className="text-gray-400" size={20} />
+            </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+
+          {error && (
+            <div className="bg-red-50 text-red-500 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:opacity-90 transition-colors flex items-center justify-center gap-2"
+          >
+            {isLoading ? (
+              <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+            ) : (
+              <>
+                <LogIn size={20} />
+                <span>Login as {loginType === 'admin' ? 'Admin' : 'User'}</span>
+              </>
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

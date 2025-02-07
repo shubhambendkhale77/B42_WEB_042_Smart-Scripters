@@ -1,44 +1,70 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { NavLink, useLocation } from "react-router-dom";
-import {FiSearch,FiUser,FiShoppingCart,FiHeart,FiHome,FiPackage,FiSun,FiMoon,FiX,FiMenu,
+import {
+  FiSearch,
+  FiUser,
+  FiShoppingCart,
+  FiHeart,
+  FiHome,
+  FiPackage,
+  FiMenu,
 } from "react-icons/fi";
+import { FaRegUser } from "react-icons/fa";
 
 const Navbar = () => {
-  const [isDark, setIsDark] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
 
-  const navLinks = [
-    { path: "/", name: "Home", icon: <FiHome /> },
-    { path: "/products", name: "Products", icon: <FiPackage /> },
-    { path: "/wishlist", name: "Wishlist", icon: <FiHeart /> },
-    { path: "/cart", name: "Cart", icon: <FiShoppingCart /> },
-    { path: "/orders", name: "Orders", icon: <FiPackage /> },
-    { path: "/login", name: "Login", icon: <FiUser /> },
-    { path: "/register", name: "Register", icon: <FiUser /> },
-  ];
+  // Check if user is admin
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  const isAuthenticated =
+    localStorage.getItem("userToken") || localStorage.getItem("adminToken");
 
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle("dark");
+  // Define navigation links based on authentication status
+  const getNavLinks = () => {
+    const commonLinks = [
+      { path: "/", name: "Home", icon: <FiHome /> },
+      { path: "/products", name: "Products", icon: <FiPackage /> },
+      { path: "/wishlist", name: "Wishlist", icon: <FiHeart /> },
+      { path: "/cart", name: "Cart", icon: <FiShoppingCart /> },
+    ];
+
+    if (isAdmin) {
+      return [
+        ...commonLinks,
+        { path: "/admin-dashboard", name: "Admin", icon: <FaRegUser /> },
+      ];
+    } else if (isAuthenticated) {
+      return [
+        ...commonLinks,
+        { path: "/orders", name: "Orders", icon: <FiPackage /> },
+        { path: "/user-dashboard", name: "Profile", icon: <FaRegUser /> },
+      ];
+    } else {
+      return [
+        ...commonLinks,
+        { path: "/user-dashboard", name: "Profile", icon: <FaRegUser /> },
+
+        { path: "/login", name: "Login", icon: <FiUser /> },
+        { path: "/register", name: "Register", icon: <FiUser /> },
+      ];
+    }
   };
+
+  const navLinks = getNavLinks();
 
   return (
     <>
       {/* Desktop/Tablet Navigation */}
       <nav className="hidden md:flex items-center justify-between p-4 bg-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-lg sticky top-0 z-50">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center space-x-4"
-        >
+        <div className="flex items-center space-x-4">
           <img
             src="https://i.ibb.co/qYsh2d3q/image-removebg-preview-1.png"
             alt="Logo"
             className="h-8 w-auto hover:rotate-12 transition-transform"
           />
-        </motion.div>
+        </div>
 
         <div className="flex-1 mx-8 max-w-2xl relative">
           <div className="flex items-center bg-gray-100 dark:bg-transparent rounded-lg px-4 py-2">
@@ -66,25 +92,17 @@ const Navbar = () => {
               to={link.path}
               className={({ isActive }) =>
                 `relative flex items-center space-x-2 p-2 rounded-lg transition-colors
-      ${
-        isActive
-          ? "text-blue-600 dark:text-blue-300"
-          : "text-gray-600 dark:text-gray-300"
-      }`
+                ${
+                  isActive
+                    ? "text-blue-600 dark:text-blue-300"
+                    : "text-gray-600 dark:text-gray-300"
+                }`
               }
             >
               {({ isActive }) => (
                 <>
                   {isActive && (
-                    <motion.div
-                      layoutId="nav-highlight"
-                      className="absolute inset-0 bg-blue-900 dark:bg-blue-900 rounded-lg pr-4"
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 30,
-                      }}
-                    />
+                    <div className="absolute inset-0 bg-blue-900 dark:bg-blue-900 rounded-lg pr-4" />
                   )}
                   <span className="relative flex items-center space-x-2 z-10 pr-4">
                     {link.icon}
@@ -94,18 +112,6 @@ const Navbar = () => {
               )}
             </NavLink>
           ))}
-
-          {/* <motion.button
-            onClick={toggleTheme}
-            whileHover={{ rotate: 180 }}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            {isDark ? (
-              <FiMoon className="text-yellow-400" />
-            ) : (
-              <FiSun className="text-gray-600" />
-            )}
-          </motion.button> */}
         </div>
       </nav>
 
@@ -124,22 +130,7 @@ const Navbar = () => {
                 }`
               }
             >
-              {({ isActive }) => (
-                <>
-                  {link.icon}
-                  {isActive && (
-                    <motion.span
-                      layoutId="mobile-highlight"
-                      className="absolute inset-0 border-2 border-blue-500 rounded-full"
-                      transition={{
-                        type: "spring",
-                        stiffness: 500,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                </>
-              )}
+              {link.icon}
             </NavLink>
           ))}
 
@@ -150,29 +141,36 @@ const Navbar = () => {
             <FiMenu />
           </button>
         </div>
-          <div>
-          <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black bg-opacity-50"
-              onClick={() => setIsMenuOpen(false)}
+
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <div
+              className="absolute bottom-0 w-full bg-white dark:bg-gray-900 rounded-t-2xl p-4"
+              onClick={(e) => e.stopPropagation()}
             >
-              <motion.div
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                exit={{ y: "100%" }}
-                className="absolute bottom-0 w-full bg-white dark:bg-gray-900 rounded-t-2xl p-4"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Mobile menu content */}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              {navLinks.slice(4).map((link) => (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `flex items-center space-x-3 p-4 ${
+                      isActive
+                        ? "text-blue-600 dark:text-blue-400"
+                        : "text-gray-600 dark:text-gray-300"
+                    }`
+                  }
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.icon}
+                  <span>{link.name}</span>
+                </NavLink>
+              ))}
+            </div>
           </div>
+        )}
       </nav>
     </>
   );
