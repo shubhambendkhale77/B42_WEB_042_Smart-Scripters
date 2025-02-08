@@ -38,6 +38,7 @@ const Carousel = () => {
   };
 
   return (
+    <div className="  ">
     <div className="relative  mr-8 ml-8 mt-10 rounded-2xl">
       {/* Image Wrapper */}
       <div className="overflow-x-hidden">
@@ -51,6 +52,7 @@ const Carousel = () => {
               src={src}
               alt={`Slide ${index + 1}`}
               className="min-h-48 object-cover rounded-2xl"
+              loading="lazy"
             />
           ))}
         </div>
@@ -71,6 +73,7 @@ const Carousel = () => {
       >
         ❯
       </button>
+    </div>
     </div>
   );
 };

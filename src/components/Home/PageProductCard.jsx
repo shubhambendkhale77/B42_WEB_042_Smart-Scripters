@@ -75,7 +75,7 @@ const PageProductCard = () => {
                     
                     <div className="h-80 flex justify-center items-center bg-gray-100">
                       <img
-                        // onClick={() => navigate(`/productinfo/${id}`)}
+                        onClick={() => navigate(`/productinfo/${id}`)}
                         className="h-full w-full object-contain p-4 "
                         src={productImageUrl}
                         alt="product"

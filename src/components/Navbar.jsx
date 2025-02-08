@@ -62,7 +62,7 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop/Tablet Navigation */}
-      <nav className="hidden md:flex items-center justify-between p-4 bg-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-lg sticky top-0 z-50">
+      <nav className="hidden md:flex items-center justify-between p-4 bg-gradient-to-r from-blue-900 to-purple-900 shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-4">
           <img
             src="https://i.ibb.co/qYsh2d3q/image-removebg-preview-1.png"
@@ -73,7 +73,7 @@ const Navbar = () => {
 
         <div className="flex-1 mx-8 max-w-2xl relative">
           <div className="flex items-center bg-gray-100 dark:bg-transparent rounded-lg px-4 py-2">
-            <FiSearch className="text-gray-500" />
+            <FiSearch className="text-gray-5100" />
             <input
               type="text"
               placeholder="Search products..."
@@ -110,7 +110,7 @@ const Navbar = () => {
                   {isActive && (
                     <motion.div
                       layoutId="activeNav"
-                      className="absolute inset-0 bg-blue-900 dark:bg-blue-900 rounded-lg pr-4"
+                      className="absolute inset-0 bg-blue-900 dark:bg-purple-600 rounded-lg pr-4"
                       transition={{
                         type: "spring",
                         stiffness: 500,
@@ -130,7 +130,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden fixed top-0 w-full bg-gradient-to-r from-gray-900 to-gray-600 border-t border-gray-200 dark:border-gray-800 z-50">
+      <nav className="md:hidden fixed top-0 w-full bg-gradient-to-r from-blue-900 to-purple-900 border-t border-gray-200 dark:border-gray-800 z-50">
         <div className="relative flex justify-around items-center p-2">
           {navLinks.slice(0, 4).map((link) => (
             <NavLink

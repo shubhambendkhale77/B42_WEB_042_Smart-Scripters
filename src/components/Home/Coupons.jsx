@@ -29,7 +29,7 @@ const Coupons = () => {
    }
 
   return (
-    <div className="mt-10 px-8 mr-8 ml-8 bg-gradient-to-r from-[#daecdf] to-gray-700 rounded-2xl ">
+    <div className="mt-10 px-8 mr-8 ml-8 bg-gradient-to-t from-[#daecdf] to-pink-700 rounded-2xl ">
   <div className="mt-10 px-8 mr-8 ml-8 ">
     <h2 className="font-bold text-2xl mb-4">
       <Title text1={"Offers for"} text2={"You"} />
