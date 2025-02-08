@@ -6,8 +6,18 @@ import { db } from "../assets/Auth/firebase";
 import { toast } from "react-toastify";
 
 const categoryList = [
-    { name: 'fashion' }, { name: 'shirt' }, { name: 'jacket' }, { name: 'mobile' },
-    { name: 'laptop' }, { name: 'shoes' }, { name: 'home' }, { name: 'books' }
+    { name: 'fashion' },
+    { name: 'shirt' },
+    { name: 'jacket' },
+    { name: 'mobile' },
+    { name: 'laptop' },
+    { name: 'shoes' },
+    { name: 'home' },
+    { name: 'books' },
+    { name: 'electronics'},
+    { name: 'grocery'},
+    { name: 'kitchen'},
+    { name: 'beauty'}
 ];
 
 const UpdateProductPage = () => {
@@ -28,6 +38,8 @@ const UpdateProductPage = () => {
         category: "",
         description: "",
         quantity: "",
+        discount: "",
+        rating: "",
         time: Timestamp.now(),
         date: new Date().toLocaleString("en-US", {
             month: "short",
@@ -50,6 +62,8 @@ const UpdateProductPage = () => {
                     category: productData.category || "",
                     description: productData.description || "",
                     quantity: productData.quantity || "",
+                    discount: productData.discount || "",
+                    rating: productData.rating || "",
                     time: productData.time || Timestamp.now(),
                     date: productData.date || new Date().toLocaleString(),
                 });
@@ -119,27 +133,23 @@ const UpdateProductPage = () => {
                 <div className="mb-3">
                     <input
                         type="text"
-                        name="productImageUrl"
-                        value={product.productImageUrl || ""}
-                        onChange={(e) => setProduct({ ...product, productImageUrl: e.target.value })}
-                        placeholder="Product Image Url"
+                        name="discount"
+                        value={product.discount || ""}
+                        onChange={(e) => setProduct({ ...product, discount: e.target.value })}
+                        placeholder="Product Discount (%)"
                         className="bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300"
                     />
                 </div>
 
                 <div className="mb-3">
-                    <select
-                        value={product.category || ""}
-                        onChange={(e) => setProduct({ ...product, category: e.target.value })}
-                        className="w-full px-1 py-2 text-pink-300 bg-pink-50 border border-pink-200 rounded-md outline-none"
-                    >
-                        <option disabled>Select Product Category</option>
-                        {categoryList.map((value, index) => (
-                            <option key={index} value={value.name} className="first-letter:uppercase">
-                                {value.name}
-                            </option>
-                        ))}
-                    </select>
+                    <input
+                        type="number"
+                        name="rating"
+                        value={product.rating || ""}
+                        onChange={(e) => setProduct({ ...product, rating: e.target.value })}
+                        placeholder="Product Rating (1-5)"
+                        className="bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300"
+                    />
                 </div>
 
                 <div className="mb-3">
