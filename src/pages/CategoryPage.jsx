@@ -1,96 +1,135 @@
 import { useNavigate, useParams } from "react-router";
-
 import { useContext } from "react";
 import { AuthContext } from "../context/useAuth";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { addToCart, deleteFromCart } from "../redux/CartSlice";
+import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer";
+import { Heart } from "lucide-react";
 
 const CategoryPage = () => {
-    const { categoryname } = useParams();
+  const { categoryname } = useParams();
+  const navigate = useNavigate();
+  const context = useContext(AuthContext);
+  const { getAllProduct, loading } = context;
 
-    const context = useContext(AuthContext);
-    const { getAllProduct, loading } = context;
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart) || [];
+  const wishlistItems = useSelector((state) => state.wishlist.wishlistItems) || [];
 
-    const navigate = useNavigate();
+  // Filter products by category
+  const filterProduct = getAllProduct.filter((obj) => obj.category.includes(categoryname));
 
-    // filter product 
-    const filterProduct = getAllProduct.filter((obj)=> obj.category.includes(categoryname));
-    // console.log(filterProduct)
-    return (
-        <>
-            <div className="mt-10">
-                {/* Heading  */}
-                <div className="">
-                    <h1 className=" text-center mb-5 text-2xl font-semibold first-letter:uppercase">{categoryname}</h1>
-                </div>
+  // Add to cart
+  const addCart = (item) => {
+    dispatch(addToCart(item));
+    toast.success("Product Added to Cart");
+  };
 
-                {loading ?
+  // Remove from cart
+  const deleteCart = (item) => {
+    dispatch(deleteFromCart(item));
+    toast.success("Product Removed from Cart");
+  };
 
-                    <div className="flex justify-center">
-                        {/* <Loader /> */}
+  // Toggle Wishlist
+  const toggleWishlist = (item) => {
+    if (wishlistItems.some((p) => p.id === item.id)) {
+      dispatch(removeFromWishlist(item.id));
+      toast.success("Removed from Wishlist");
+    } else {
+      dispatch(addToWishlist(item));
+      toast.success("Added to Wishlist");
+    }
+  };
+
+  return (
+    <div className="mt-10 px-4 md:px-8">
+      {/* Heading */}
+      <h1 className="text-center text-3xl font-semibold first-letter:uppercase text-gray-800 mb-6">
+        {categoryname}
+      </h1>
+
+      {/* Loading State */}
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      ) : (
+        <section className="text-gray-700">
+          <div className="container mx-auto py-6">
+            {/* Grid layout for responsiveness */}
+            {filterProduct.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {filterProduct.map((item, index) => {
+                  const { id, title, price, productImageUrl } = item;
+                  const isWishlisted = wishlistItems.some((p) => p.id === id);
+                  return (
+                    <div
+                      key={index}
+                      className="bg-white shadow-md rounded-xl overflow-hidden transition-transform hover:scale-[1.02] cursor-pointer border border-gray-200 relative"
+                    >
+                      {/* Wishlist Icon */}
+                      <div
+                        className="absolute top-4 right-4 cursor-pointer text-gray-500 hover:text-red-500"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleWishlist(item);
+                        }}
+                      >
+                        <Heart fill={isWishlisted ? "red" : "none"} stroke={isWishlisted ? "red" : "black"} size={24} />
+                      </div>
+
+                      {/* Product Image */}
+                      <img
+                        onClick={() => navigate(`/productinfo/${id}`)}
+                        className="w-full h-56 object-center"
+                        src={productImageUrl}
+                        alt={title}
+                      />
+                      <div className="p-4">
+                        <h1 className="text-lg font-medium text-gray-900 mb-2 ml-4 truncate">
+                          {title.substring(0, 25)}
+                        </h1>
+                        <p className="text-lg font-semibold text-pink-600 ml-4">₹{price}</p>
+
+                        {/* Add/Remove from Cart Button */}
+                        {cartItems.some((p) => p.id === item.id) ? (
+                          <button
+                            onClick={() => deleteCart(item)}
+                            className="w-full mt-3 py-2 bg-red-700 text-white rounded-bl-2xl font-semibold transition-all duration-300 hover:bg-red-600 active:scale-95"
+                          >
+                            Remove From Cart
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => addCart(item)}
+                            className="w-full mt-3 py-2 bg-purple-700 text-white rounded-bl-2xl font-semibold transition-all duration-300 hover:bg-pink-600 active:scale-95"
+                          >
+                            Add To Cart
+                          </button>
+                        )}
+                      </div>
                     </div>
-
-                    :
-
-                    <section className="text-gray-600 body-font">
-                        {/* main 2 */}
-                        <div className="container px-5 py-5 mx-auto">
-                            {/* main 3  */}
-                            <div className="flex flex-wrap -m-4 justify-center">
-                                {filterProduct.length > 0 ?
-                                    <>
-                                        {filterProduct.map((item, index) => {
-                                            const { id, title, price, productImageUrl } = item;
-                                            return (
-                                                <div key={index} className="p-4 w-full md:w-1/4">
-                                                    <div className="h-full border border-gray-300 rounded-xl overflow-hidden shadow-md cursor-pointer">
-                                                        <img
-                                                            onClick={() => navigate(`/productinfo/${id}`)}
-                                                            className="lg:h-80  h-96 w-full"
-                                                            src={productImageUrl}
-                                                            alt="img"
-                                                        />
-                                                        <div className="p-6">
-                                                            <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
-                                                                E-bharat
-                                                            </h2>
-                                                            <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
-                                                                {title.substring(0, 25)}
-                                                            </h1>
-                                                            <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
-                                                                ₹{price}
-                                                            </h1>
-
-                                                            <div className="flex justify-center ">
-                                                                <button className=" bg-pink-500 hover:bg-pink-600 w-full text-white py-[4px] rounded-lg font-bold">
-                                                                    Add To Cart
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        })}
-                                    </>
-
-                                    :
-
-                                    <div>
-                                        <div className="flex justify-center">
-                                            <img className=" mb-2" src="https://cdn-icons-png.flaticon.com/128/2748/2748614.png" alt="" />
-                                        </div>
-                                        <h1 className=" text-black text-xl">No {categoryname} product found</h1>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-                    </section>
-
-                }
-            </div>
-        </>
-    );
-}
+                  );
+                })}
+              </div>
+            ) : (
+              // No Products Found
+              <div className="flex flex-col items-center mt-10">
+                <img
+                  className="w-24 mb-3"
+                  src="https://cdn-icons-png.flaticon.com/128/2748/2748614.png"
+                  alt="No Products"
+                />
+                <h1 className="text-xl text-gray-800">No {categoryname} products found</h1>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+};
 
 export default CategoryPage;

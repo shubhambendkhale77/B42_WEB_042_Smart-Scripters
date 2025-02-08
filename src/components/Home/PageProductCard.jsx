@@ -92,17 +92,18 @@ const PageProductCard = () => {
                         {cartItems.some((p) => p.id === item.id) ? (
                           <button
                             onClick={() => deleteCart(item)}
-                            className="bg-red-600 hover:bg-red-700 w-50 text-white py-1 text-sm rounded-lg font-bold transition duration-300"
+                            className="w-full mt-3 py-2 bg-red-700 text-white rounded-bl-2xl font-semibold transition-all duration-300 hover:bg-red-600 active:scale-95"
                           >
                             Remove From Cart
                           </button>
                         ) : (
                           <button
                             onClick={() => addCart(item)}
-                            className="bg-gray-500 hover:bg-gray-600 w-50 mb-4 text-white py-1 text-sm rounded-lg font-bold transition duration-300"
+                            className="w-full mt-3 py-2 bg-purple-700 text-white rounded-bl-2xl font-semibold transition-all duration-300 hover:bg-pink-600 active:scale-95"
                           >
                             Add To Cart
                           </button>
+                          
                         )}
                       </div>
                     </div>
