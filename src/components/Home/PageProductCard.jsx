@@ -19,21 +19,49 @@ const PageProductCard = () => {
 
   const addCart = (item) => {
     dispatch(addToCart(item));
-    toast.success("Product Added to Cart");
+    toast.success("Added to cart", {
+      icon: "🛍️",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
 
   const deleteCart = (item) => {
     dispatch(deleteFromCart(item));
-    toast.success("Product Removed from Cart");
+    toast.success("Removed from cart", {
+      icon: "🗑️",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
 
   const toggleWishlist = (item) => {
     if (wishlistItems.some((p) => p.id === item.id)) {
       dispatch(removeFromWishlist(item.id));
-      toast.success("Removed from Wishlist");
+      toast.success("Removed from wishlist", {
+        icon: "💔",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     } else {
       dispatch(addToWishlist(item));
-      toast.success("Added to Wishlist");
+      toast.success("Added to wishlist", {
+        icon: "❤️",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
   };
 
@@ -64,7 +92,7 @@ const PageProductCard = () => {
                   <div className="h-full border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 cursor-pointer bg-white">
                     {/* Wishlist Heart Icon */}
                     <div
-                      className="absolute top-4 right-4 cursor-pointer text-gray-500 hover:text-red-500"
+                      className="absolute top-8 right-8 cursor-pointer text-gray-500 hover:text-red-500"
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent navigation on click
                         toggleWishlist(item);
@@ -92,17 +120,18 @@ const PageProductCard = () => {
                         {cartItems.some((p) => p.id === item.id) ? (
                           <button
                             onClick={() => deleteCart(item)}
-                            className="bg-red-600 hover:bg-red-700 w-50 text-white py-1 text-sm rounded-lg font-bold transition duration-300"
+                            className="w-full mt-3 py-2 bg-red-700 text-white rounded-b-2xl font-semibold transition-all duration-300 hover:bg-red-600 active:scale-95"
                           >
                             Remove From Cart
                           </button>
                         ) : (
                           <button
                             onClick={() => addCart(item)}
-                            className="bg-gray-500 hover:bg-gray-600 w-50 mb-4 text-white py-1 text-sm rounded-lg font-bold transition duration-300"
+                            className="w-full mt-3 py-2 bg-purple-700 text-white rounded-b-2xl font-semibold transition-all duration-300 hover:bg-pink-600 active:scale-95"
                           >
                             Add To Cart
                           </button>
+                          
                         )}
                       </div>
                     </div>

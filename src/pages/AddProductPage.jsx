@@ -46,6 +46,13 @@ const AddProductPage = () => {
             return toast.error('All fields are required');
         }
 
+        // Validate image URL
+        try {
+            new URL(product.productImageUrl);
+        } catch (error) {
+            return toast.error('Please enter a valid image URL');
+        }
+
         setLoading(true);
         try {
             const productRef = collection(db, 'products');
@@ -81,6 +88,7 @@ const AddProductPage = () => {
                     </div>
 
                     <div className="px-8 py-6 space-y-6">
+                        {/* Title Field */}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                                 <Tag className="w-4 h-4" />
@@ -94,6 +102,35 @@ const AddProductPage = () => {
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                 placeholder="Enter product title"
                             />
+                        </div>
+
+                        {/* Image URL Field */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                <Image className="w-4 h-4" />
+                                Product Image URL
+                            </label>
+                            <input
+                                type="url"
+                                name="productImageUrl"
+                                value={product.productImageUrl}
+                                onChange={handleInputChange}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                placeholder="Enter image URL"
+                            />
+                            {product.productImageUrl && (
+                                <div className="mt-2 relative w-32 h-32 rounded-lg overflow-hidden border border-gray-300">
+                                    <img
+                                        src={product.productImageUrl}
+                                        alt="Product preview"
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            e.target.src = '/api/placeholder/128/128';
+                                            toast.error('Failed to load image');
+                                        }}
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

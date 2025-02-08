@@ -29,31 +29,31 @@ const Coupons = () => {
    }
 
   return (
-    <div className="mt-10 px-8 mr-8 ml-8 bg-gradient-to-t from-[#daecdf] to-pink-700 rounded-2xl ">
-  <div className="mt-10 px-8 mr-8 ml-8 ">
-    <h2 className="font-bold text-2xl mb-4">
+    <div className="mt-12 mx-8 px-8 bg-gradient-to-t from-[#daecdf] to-pink-700 rounded-2xl py-10">
+  <div className="px-6">
+    <h2 className="font-bold text-2xl mb-6">
       <Title text1={"Offers for"} text2={"You"} />
     </h2>
-    
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 ">
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
       {coupons.map((coupon, index) => (
-        <div className='m-4'>
-        <div 
-          key={index} 
-          className="transition duration-300 hover:scale-110 hover:shadow-lg cursor-pointer rounded-lg shadow-md overflow-hidden bg-white p-2"
-        >
-          <img 
-            src={coupon.imgUrl} 
-            alt={coupon.path} 
+        <div key={index} className="p-2">
+          <div 
+            className="transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer rounded-xl shadow-md overflow-hidden bg-white p-3"
             onClick={() => handleOffers(coupon.path)}
-            className="w-full h-48 object-center rounded-md  bg-gray-100 " 
-          />
+          >
+            <img 
+              src={coupon.imgUrl} 
+              alt={coupon.path} 
+              className="w-full h-48 object-cover rounded-lg bg-gray-100"
+            />
           </div>
         </div>
       ))}
     </div>
   </div>
 </div>
+
 
     
   );
