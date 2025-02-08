@@ -96,38 +96,38 @@ const Navbar = () => {
         <div className="relative flex items-center space-x-6">
           {navLinks.map((link) => (
            <NavLink
-           key={link.path}
-           to={link.path}
-           className={({ isActive }) =>
-             `relative flex items-center space-x-2 p-2 rounded-lg transition-colors ${
-               isActive
-                 ? "text-blue-600 dark:text-blue-300"
-                 : "text-gray-600 dark:text-gray-300"
-             }`
-           }
-           onClick={link.onClick}
-         >
-           {({ isActive }) => (
-             <>
-               {isActive && (
-                 <motion.div
-                   layoutId="activeNav"
-                   className="absolute inset-0 bg-blue-900 dark:bg-purple-600 rounded-lg"
-                   transition={{
-                     type: "spring",
-                     stiffness: 500,
-                     damping: 30,
-                   }}
-                 />
-               )}
-               <span className="relative flex items-center space-x-2 z-10 pr-4">
-                 {link.icon}
-                 <span className="hidden lg:inline">{link.name}</span>
-               </span>
-             </>
-           )}
-         </NavLink>
-         
+  key={link.path}
+  to={link.path}
+  className={({ isActive }) =>
+    `relative flex items-center space-x-2 p-2 rounded-lg transition-colors ${
+      isActive
+        ? "text-blue-600 dark:text-blue-300"
+        : "text-gray-600 dark:text-gray-300"
+    }`
+  }
+  onClick={link.onClick}
+>
+  {({ isActive }) => (
+    <>
+      {isActive && (
+        <motion.div
+          layoutId="activeNav"
+          className="absolute inset-0 bg-blue-900 dark:bg-purple-600 rounded-lg"
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 30,
+          }}
+        />
+      )}
+      <span className="relative flex items-center space-x-2 z-10 pr-4">
+        {link.icon}
+        <span className="hidden lg:inline">{link.name}</span>
+      </span>
+    </>
+  )}
+</NavLink>
+
           ))}
         </div>
       </nav>

@@ -4,7 +4,7 @@ const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Images array
-  const images = [
+  const images1 = [
     "https://api.spicezgold.com/download/file_1734524985581_NewProject(11).jpg",
     "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg",
     "https://api.spicezgold.com/download/file_1734524893797_NewProject(13).jpg",
@@ -13,6 +13,15 @@ const Carousel = () => {
     "https://api.spicezgold.com/download/file_1734525002307_1723967638078_slideBanner1.6bbeed1a0c8ffb494f7c.jpg",
     "https://api.spicezgold.com/download/file_1734525014348_NewProject(7).jpg",
   ];
+  const images = [
+    "https://i.ibb.co/9mTpCZrG/1.jpg",
+    "https://i.ibb.co/dwv4z6Nq/2.jpg",
+    "https://i.ibb.co/JFWjGF0W/3.jpg",
+    "https://i.ibb.co/jPWLHBZJ/4.jpg",
+    "https://i.ibb.co/js2YLpw/5.jpg",
+    "https://i.ibb.co/ccVHB1rG/6.jpg"
+  ];
+  
 
   // Function to go to the next slide
   const nextSlide = () => {
@@ -39,7 +48,7 @@ const Carousel = () => {
 
   return (
     <div className="  ">
-    <div className="relative  mr-8 ml-8 mt-10 rounded-2xl">
+    <div className="relative  mr-8 ml-8 mt-15 sm:mt-20 rounded-2xl">
       {/* Image Wrapper */}
       <div className="overflow-x-hidden">
         <div
