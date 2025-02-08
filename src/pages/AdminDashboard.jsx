@@ -19,8 +19,8 @@ const AdminDashboard = () => {
   const [totalOrders, setTotalOrders] = useState(0);
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("adminEmail") || "admin@example.com";
-    const storedName = localStorage.getItem("adminName") || "Admin User";
+    const storedEmail = localStorage.getItem("adminEmail") || "aayush@admin.com";
+    const storedName = localStorage.getItem("adminName") || "Aayush Pandey";
     
     setAdmin({ email: storedEmail, name: storedName });
   }, []);

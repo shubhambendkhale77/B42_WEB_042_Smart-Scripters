@@ -5,6 +5,7 @@ import "./index.css";
 import { AuthProvider } from "./context/useAuth.jsx";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
+
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
   <Provider store={store}>

@@ -3,7 +3,7 @@ import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
 import { db } from '../assets/Auth/firebase';
 import toast from 'react-hot-toast';
-import { Image, IndianRupee , Tag, FileText, Plus } from 'lucide-react';
+import { Image, IndianRupee, Tag, FileText, Plus, Star, Percent } from 'lucide-react';
 
 const categoryList = [
     { name: 'fashion' },
@@ -13,7 +13,11 @@ const categoryList = [
     { name: 'laptop' },
     { name: 'shoes' },
     { name: 'home' },
-    { name: 'books' }
+    { name: 'books' },
+    { name: 'electronics' },
+    { name: 'grocery' },
+    { name: 'kitchen' },
+    { name: 'beauty' }
 ];
 
 const AddProductPage = () => {
@@ -27,6 +31,8 @@ const AddProductPage = () => {
         category: '',
         description: '',
         quantity: 1,
+        rating: '',
+        discount: '',
         time: Timestamp.now(),
         date: new Date().toLocaleString('en-US', {
             month: 'short',
@@ -36,7 +42,7 @@ const AddProductPage = () => {
     });
 
     const addProductFunction = async () => {
-        if (!product.title || !product.price || !product.productImageUrl || !product.category || !product.description) {
+        if (!product.title || !product.price || !product.productImageUrl || !product.category || !product.description || !product.rating || !product.discount) {
             return toast.error('All fields are required');
         }
 
@@ -66,7 +72,6 @@ const AddProductPage = () => {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto">
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    {/* Header */}
                     <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
                         <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                             <Plus className="w-6 h-6" />
@@ -75,9 +80,7 @@ const AddProductPage = () => {
                         <p className="text-blue-100 mt-1">Fill in the information below to add a new product</p>
                     </div>
 
-                    {/* Form */}
                     <div className="px-8 py-6 space-y-6">
-                        {/* Title Input */}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                                 <Tag className="w-4 h-4" />
@@ -93,12 +96,10 @@ const AddProductPage = () => {
                             />
                         </div>
 
-                        {/* Price & Category Group */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Price Input */}
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                                    <IndianRupee  className="w-4 h-4" />
+                                    <IndianRupee className="w-4 h-4" />
                                     Price
                                 </label>
                                 <input
@@ -111,7 +112,6 @@ const AddProductPage = () => {
                                 />
                             </div>
 
-                            {/* Category Select */}
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">Category</label>
                                 <select
@@ -130,23 +130,6 @@ const AddProductPage = () => {
                             </div>
                         </div>
 
-                        {/* Image URL Input */}
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                                <Image className="w-4 h-4" />
-                                Image URL
-                            </label>
-                            <input
-                                type="text"
-                                name="productImageUrl"
-                                value={product.productImageUrl}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                placeholder="Enter image URL"
-                            />
-                        </div>
-
-                        {/* Description Textarea */}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                                 <FileText className="w-4 h-4" />
@@ -162,7 +145,37 @@ const AddProductPage = () => {
                             />
                         </div>
 
-                        {/* Submit Button */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                    <Star className="w-4 h-4" />
+                                    Rating
+                                </label>
+                                <input
+                                    type="number"
+                                    name="rating"
+                                    value={product.rating}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                    placeholder="Enter rating"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                    <Percent className="w-4 h-4" />
+                                    Discount
+                                </label>
+                                <input
+                                    type="number"
+                                    name="discount"
+                                    value={product.discount}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                    placeholder="Enter discount"
+                                />
+                            </div>
+                        </div>
+
                         <button
                             onClick={addProductFunction}
                             disabled={loading}

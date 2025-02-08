@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { motion ,AnimatePresence } from "framer-motion";
 import {
   FiSearch,
   FiUser,
@@ -11,7 +12,7 @@ import {
 } from "react-icons/fi";
 import { FaRegUser, FaSignOutAlt } from "react-icons/fa";
 
-// add custom Hook
+// Custom Hook
 import useLogout from "../../hooks/useLogout";
 
 const Navbar = () => {
@@ -20,7 +21,7 @@ const Navbar = () => {
   const location = useLocation();
   const logout = useLogout();
 
-  // Check if user is admin
+  // Check authentication & admin status
   const isAdmin = localStorage.getItem("isAdmin") === "true";
   const isAuthenticated =
     localStorage.getItem("userToken") || localStorage.getItem("adminToken");
@@ -61,7 +62,7 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop/Tablet Navigation */}
-      <nav className="hidden md:flex items-center justify-between p-4 bg-white bg-gradient-to-r from-gray-900 to-gray-700 shadow-lg sticky top-0 z-50">
+      <nav className="hidden md:flex items-center justify-between p-4 bg-gradient-to-r from-blue-900 to-purple-900 shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-4">
           <img
             src="https://i.ibb.co/qYsh2d3q/image-removebg-preview-1.png"
@@ -72,7 +73,7 @@ const Navbar = () => {
 
         <div className="flex-1 mx-8 max-w-2xl relative">
           <div className="flex items-center bg-gray-100 dark:bg-transparent rounded-lg px-4 py-2">
-            <FiSearch className="text-gray-500" />
+            <FiSearch className="text-gray-5100" />
             <input
               type="text"
               placeholder="Search products..."
@@ -107,7 +108,15 @@ const Navbar = () => {
               {({ isActive }) => (
                 <>
                   {isActive && (
-                    <div className="absolute inset-0 bg-blue-900 dark:bg-blue-900 rounded-lg pr-4" />
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute inset-0 bg-blue-900 dark:bg-purple-600 rounded-lg pr-4"
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
+                    />
                   )}
                   <span className="relative flex items-center space-x-2 z-10 pr-4">
                     {link.icon}
@@ -121,7 +130,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden fixed bottom-0 w-full bg-gradient-to-r from-gray-900 to-gray-600 border-t border-gray-200 dark:border-gray-800 z-50">
+      <nav className="md:hidden fixed top-0 w-full bg-gradient-to-r from-blue-900 to-purple-900 border-t border-gray-200 dark:border-gray-800 z-50">
         <div className="relative flex justify-around items-center p-2">
           {navLinks.slice(0, 4).map((link) => (
             <NavLink
@@ -135,7 +144,22 @@ const Navbar = () => {
                 }`
               }
             >
-              {link.icon}
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNavMobile"
+                      className="absolute inset-0   rounded-full opacity-100 border-2 border-blue-600 dark:border-blue-400"
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                  {link.icon}
+                </>
+              )}
             </NavLink>
           ))}
 
@@ -147,35 +171,41 @@ const Navbar = () => {
           </button>
         </div>
 
-        {isMenuOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50"
+        <AnimatePresence>
+  {isMenuOpen && (
+    <div
+      className="fixed inset-0 bg-transparent bg-opacity-50"
+      onClick={() => setIsMenuOpen(false)}
+    >
+      <motion.div
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="absolute bottom-0 w-full bg-white dark:bg-gray-900 rounded-t-2xl p-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {navLinks.map((link) => (
+          <NavLink
+            key={link.path}
+            to={link.path}
+            className={({ isActive }) =>
+              `flex items-center space-x-3 p-4 ${
+                isActive
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-600 dark:text-gray-300"
+              }`
+            }
             onClick={() => setIsMenuOpen(false)}
           >
-            <div
-              className="absolute bottom-0 w-full bg-white dark:bg-gray-900 rounded-t-2xl p-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {navLinks.slice(4).map((link) => (
-                <NavLink
-                  key={link.path}
-                  to={link.path}
-                  className={({ isActive }) =>
-                    `flex items-center space-x-3 p-4 ${
-                      isActive
-                        ? "text-blue-600 dark:text-blue-400"
-                        : "text-gray-600 dark:text-gray-300"
-                    }`
-                  }
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.icon}
-                  <span>{link.name}</span>
-                </NavLink>
-              ))}
-            </div>
-          </div>
-        )}
+            {link.icon}
+            <span>{link.name}</span>
+          </NavLink>
+        ))}
+      </motion.div>
+    </div>
+  )}
+</AnimatePresence>
       </nav>
     </>
   );
