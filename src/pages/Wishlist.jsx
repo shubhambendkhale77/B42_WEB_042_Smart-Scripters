@@ -28,7 +28,7 @@ const Wishlist = () => {
         <div className="flex items-center justify-between mb-6">
           <Link 
             to="/" 
-            className="flex items-center text-purple-600 hover:text-purple-700 transition"
+            className="flex items-center text-red-500 hover:text-red-500 transition"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             <span className="text-sm font-medium">Continue Shopping</span>
@@ -77,6 +77,7 @@ const Wishlist = () => {
                       className="w-full h-full object-contain p-2"
                     />
                   </div>
+                  
                   <button
                     onClick={() => handleRemoveFromWishlist(item.id)}
                     className="absolute top-2 right-2 p-1.5 bg-white/90 rounded-full shadow-sm hover:bg-gray-100 transition-colors"
@@ -86,7 +87,7 @@ const Wishlist = () => {
                 </div>
 
                 <div className="p-3 flex flex-col flex-grow bg-white">
-                  <p className="text-xs text-purple-600 font-medium mb-1">E-bharat</p>
+                  <p className="text-xs text-yellow-700 font-medium mb-1">Shop-Smart</p>
                   <h3 className="text-sm font-medium text-gray-800 mb-2 line-clamp-2 flex-grow">
                     {item.title}
                   </h3>
@@ -97,7 +98,7 @@ const Wishlist = () => {
                     </span>
                     <button
                       onClick={() => handleAddToCart(item)}
-                      className="inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 transition-colors"
+                      className="inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded-full text-white bg-red-400 hover:bg-red-500 transition-colors"
                     >
                       <ShoppingCart className="w-3 h-3 mr-1" />
                       Add
