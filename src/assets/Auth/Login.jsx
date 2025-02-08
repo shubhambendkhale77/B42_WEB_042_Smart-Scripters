@@ -1,8 +1,8 @@
-// Login.js
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, LogIn, User, Shield } from 'lucide-react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase';
+import { auth, db } from './firebase'; // Ensure Firestore is imported
+import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -21,29 +21,40 @@ const Login = () => {
 
     try {
       if (loginType === 'admin') {
-        // Admin login with hardcoded credentials
+        // 🔹 Admin Login with hardcoded credentials
         if (email === 'shubham@admin.com' && password === 'shubham123') {
           localStorage.setItem('isAdmin', 'true');
           localStorage.setItem('adminToken', 'admin-token-123');
           navigate('/admin-dashboard');
         } else {
-          throw new Error('Invalid Admin');
+          throw new Error('Invalid Admin Credentials');
         }
       } else {
-        // User login with Firebase
+        // 🔹 Regular User Login with Firebase Authentication
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        localStorage.setItem('user', JSON.stringify({
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName || '',
-          photoURL: user.photoURL || '',
-          accessToken: user.accessToken,
-        }));
-        navigate('/user-dashboard');
+
+        // Fetch user details from Firestore
+        const userRef = doc(db, 'Users', user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          localStorage.setItem('user', JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            firstName: userData.firstName || '',
+            lastName: userData.lastName || '',
+            photoURL: user.photoURL || '',
+            accessToken: user.accessToken || '',
+          }));
+          navigate('/user-dashboard');
+        } else {
+          throw new Error('User data not found in Firestore');
+        }
       }
     } catch (error) {
-      setError(loginType === 'admin' ? 'Invalid Admin' : 'Invalid User');
+      setError(loginType === 'admin' ? 'Invalid Admin Credentials' : 'Invalid User Credentials');
     } finally {
       setIsLoading(false);
     }
@@ -56,6 +67,7 @@ const Login = () => {
           Welcome Back
         </h2>
 
+        {/* Admin/User Toggle Buttons */}
         <div className="flex gap-4 mb-8">
           <button
             onClick={() => setLoginType('user')}
@@ -81,6 +93,7 @@ const Login = () => {
           </button>
         </div>
 
+        {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -92,6 +105,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder={`${loginType === 'admin' ? 'Admin' : 'User'} Email`}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
 
@@ -100,11 +114,12 @@ const Login = () => {
               <Lock className="text-gray-400" size={20} />
             </div>
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
             <button
               type="button"

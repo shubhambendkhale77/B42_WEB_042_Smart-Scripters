@@ -1,10 +1,17 @@
 import { Button, Dialog, DialogBody } from "@material-tailwind/react";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const BuyNowModal = ({addressInfo,setAddressInfo,buyNowFunction}) => {
 
   const [open, setOpen] = useState(false);
+  const auth = getAuth();
+   onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    console.log("User is logged out");
+  }
+});
 
   const handleOpen = () => setOpen(!open);
   return (
