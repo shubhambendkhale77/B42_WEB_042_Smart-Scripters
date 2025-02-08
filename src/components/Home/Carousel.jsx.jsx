@@ -61,7 +61,7 @@ const Carousel = () => {
               src={src}
               alt={`Slide ${index + 1}`}
               className="min-h-48 object-cover rounded-2xl"
-              
+              loading="lazy"
             />
           ))}
         </div>
