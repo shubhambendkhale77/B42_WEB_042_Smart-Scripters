@@ -3,7 +3,9 @@ import { AuthContext } from "../context/useAuth";
 import { useContext, useEffect, useState } from "react";
 import { Timestamp, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../assets/Auth/firebase";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ArrowLeft, Save, Image, Tag, Percent, Star, List } from "lucide-react";
 
 const categoryList = [
     { name: 'fashion' },
@@ -14,10 +16,10 @@ const categoryList = [
     { name: 'shoes' },
     { name: 'home' },
     { name: 'books' },
-    { name: 'electronics'},
-    { name: 'grocery'},
-    { name: 'kitchen'},
-    { name: 'beauty'}
+    { name: 'electronics' },
+    { name: 'grocery' },
+    { name: 'kitchen' },
+    { name: 'beauty' }
 ];
 
 const UpdateProductPage = () => {
@@ -70,6 +72,7 @@ const UpdateProductPage = () => {
             }
         } catch (error) {
             console.error("Error fetching product:", error);
+            toast.error("Failed to fetch product data. Please try again.");
         }
         setLoading(false);
     };
@@ -88,6 +91,7 @@ const UpdateProductPage = () => {
             navigate("/admin-dashboard");
         } catch (error) {
             console.error("Error updating product:", error);
+            toast.error("Failed to update product. Please try again.");
         }
     };
 
@@ -100,75 +104,141 @@ const UpdateProductPage = () => {
     }, [product]);
 
     if (loading) {
-        return <h2 className="text-center text-pink-500">Loading product data...</h2>;
+        return <h2 className="text-center text-2xl font-semibold mt-10">Loading product data...</h2>;
     }
 
     return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="login_Form bg-pink-50 px-8 py-6 border border-pink-100 rounded-xl shadow-md">
-                <h2 className="text-center text-2xl font-bold text-pink-500 mb-5">Update Product</h2>
+        <div className="min-h-screen bg-gray-100 p-6">
+            {/* Toast Container */}
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
 
-                <div className="mb-3">
-                    <input
-                        type="text"
-                        name="title"
-                        value={product.title || ""}
-                        onChange={(e) => setProduct({ ...product, title: e.target.value })}
-                        placeholder="Product Title"
-                        className="bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300"
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <input
-                        type="number"
-                        name="price"
-                        value={product.price || ""}
-                        onChange={(e) => setProduct({ ...product, price: e.target.value })}
-                        placeholder="Product Price"
-                        className="bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300"
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <input
-                        type="text"
-                        name="discount"
-                        value={product.discount || ""}
-                        onChange={(e) => setProduct({ ...product, discount: e.target.value })}
-                        placeholder="Product Discount (%)"
-                        className="bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300"
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <input
-                        type="number"
-                        name="rating"
-                        value={product.rating || ""}
-                        onChange={(e) => setProduct({ ...product, rating: e.target.value })}
-                        placeholder="Product Rating (1-5)"
-                        className="bg-pink-50 border text-pink-300 border-pink-200 px-2 py-2 w-96 rounded-md outline-none placeholder-pink-300"
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <textarea
-                        value={product.description || ""}
-                        onChange={(e) => setProduct({ ...product, description: e.target.value })}
-                        placeholder="Product Description"
-                        rows="5"
-                        className="w-full px-2 py-1 text-pink-300 bg-pink-50 border border-pink-200 rounded-md outline-none placeholder-pink-300"
-                    />
-                </div>
-
+            <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
                 <button
-                    onClick={updateProduct}
-                    type="button"
-                    className="bg-pink-500 hover:bg-pink-600 w-full text-white text-center py-2 font-bold rounded-md"
+                    onClick={() => navigate(-1)}
+                    className="flex items-center text-gray-600 hover:text-gray-800 mb-4"
                 >
-                    Update Product
+                    <ArrowLeft className="w-5 h-5 mr-2" />
+                    Back
                 </button>
+
+                <h2 className="text-2xl font-bold mb-6">Update Product</h2>
+
+                <div className="space-y-6">
+                    {/* Product Title */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            <Tag className="w-4 h-4 mr-2" />
+                            Product Title
+                        </label>
+                        <input
+                            type="text"
+                            name="title"
+                            value={product.title || ""}
+                            onChange={(e) => setProduct({ ...product, title: e.target.value })}
+                            placeholder="Enter product title"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    {/* Product Price */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            <Tag className="w-4 h-4 mr-2" />
+                            Product Price
+                        </label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={product.price || ""}
+                            onChange={(e) => setProduct({ ...product, price: e.target.value })}
+                            placeholder="Enter product price"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    {/* Product Image URL */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            <Image className="w-4 h-4 mr-2" />
+                            Product Image URL
+                        </label>
+                        <input
+                            type="text"
+                            name="productImageUrl"
+                            value={product.productImageUrl || ""}
+                            onChange={(e) => setProduct({ ...product, productImageUrl: e.target.value })}
+                            placeholder="Enter product image URL"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    {/* Product Discount */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            <Percent className="w-4 h-4 mr-2" />
+                            Product Discount (%)
+                        </label>
+                        <input
+                            type="text"
+                            name="discount"
+                            value={product.discount || ""}
+                            onChange={(e) => setProduct({ ...product, discount: e.target.value })}
+                            placeholder="Enter product discount"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    {/* Product Rating */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            <Star className="w-4 h-4 mr-2" />
+                            Product Rating (1-5)
+                        </label>
+                        <input
+                            type="number"
+                            name="rating"
+                            value={product.rating || ""}
+                            onChange={(e) => setProduct({ ...product, rating: e.target.value })}
+                            placeholder="Enter product rating"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    {/* Product Description */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                            <List className="w-4 h-4 mr-2" />
+                            Product Description
+                        </label>
+                        <textarea
+                            value={product.description || ""}
+                            onChange={(e) => setProduct({ ...product, description: e.target.value })}
+                            placeholder="Enter product description"
+                            rows="5"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    {/* Update Button */}
+                    <button
+                        onClick={updateProduct}
+                        type="button"
+                        className="w-full flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <Save className="w-5 h-5 mr-2" />
+                        Update Product
+                    </button>
+                </div>
             </div>
         </div>
     );
