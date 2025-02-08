@@ -33,7 +33,13 @@ const Login = () => {
         // User login with Firebase
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        localStorage.setItem('userToken', user.accessToken);
+        localStorage.setItem('user', JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName || '',
+          photoURL: user.photoURL || '',
+          accessToken: user.accessToken,
+        }));
         navigate('/user-dashboard');
       }
     } catch (error) {

@@ -44,12 +44,40 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const [getAllOrder, setGetAllOrder] = useState([]);
+
+  const getAllOrderFunction = async () => {
+    try {
+      
+      const q = query(collection(db, "orders"), orderBy("time"));
+      const data = onSnapshot(q, (QuerySnapshot) =>{
+        let orderArray = []
+        QuerySnapshot.forEach((doc) => {
+          orderArray.push({
+            ...doc.data(),
+            id: doc.id
+          })
+        })
+        setGetAllOrder(orderArray)
+        setLoading(false)
+        });
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        setLoading(false)
+      }
+    };
+
+    useEffect(() => {
+      getAllOrderFunction()
+    }, [])
+    // console.log(getAllOrder)
+
   const value = useMemo(() => ({
     currentUser,
     loading,
     setLoading,
     getAllProduct,
-    getAllProductFunction: fetchProducts,
+    getAllProductFunction: fetchProducts,getAllOrder
   }), [currentUser, loading, getAllProduct, fetchProducts]);
 
   return (
