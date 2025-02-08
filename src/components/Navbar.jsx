@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion ,AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   FiSearch,
   FiUser,
@@ -20,6 +21,7 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const logout = useLogout();
+  const navigate = useNavigate();
 
   // Check authentication & admin status
   const isAdmin = localStorage.getItem("isAdmin") === "true";
@@ -65,9 +67,10 @@ const Navbar = () => {
       <nav className="hidden md:flex items-center justify-between p-4 bg-gradient-to-r from-blue-900 to-purple-900 shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-4">
           <img
-            src="https://i.ibb.co/qYsh2d3q/image-removebg-preview-1.png"
-            alt="Logo"
-            className="h-8 w-auto hover:rotate-12 transition-transform"
+            src="https://i.ibb.co/WN7vgHrT/Shop-Smart1.png"
+            alt="Shop-Smart"
+            onClick={() => navigate("/")} 
+            className="h-10 w-auto hover:scale-110 transition-transform"
           />
         </div>
 
