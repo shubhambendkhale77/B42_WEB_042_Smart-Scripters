@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { FiFacebook, FiInstagram, FiYoutube } from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import {
   FiSearch,
   FiUser,
@@ -15,6 +16,7 @@ import {
 } from "react-icons/fi";
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <footer className="bg-gradient-to-r from-blue-900 to-purple-900 text-white py-8 mt-8 shadow-xl">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-12 lg:px-16">
@@ -22,9 +24,10 @@ const Footer = () => {
           {/* Logo and About */}
           <div>
             <img
-              src="https://i.ibb.co/qYsh2d3q/image-removebg-preview-1.png"
+              src="https://i.ibb.co/WN7vgHrT/Shop-Smart1.png"
+              onClick={() => navigate("/")} 
               alt="Your Company Logo"
-              className="h-12 mx-auto md:mx-0 mb-3 drop-shadow-lg"
+              className="h-17 mx-auto md:mx-0 mb-3 drop-shadow-lg hover:scale-110 transition-transform"
             />
             <p className="text-sm font-light">
               Your one-stop shop for amazing products. Discover, shop, and
