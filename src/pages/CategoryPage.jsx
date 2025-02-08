@@ -23,28 +23,58 @@ const CategoryPage = () => {
   // Add to cart
   const addCart = (item) => {
     dispatch(addToCart(item));
-    toast.success("Product Added to Cart");
+    toast.success("Added to cart", {
+      icon: "🛍️",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
 
   // Remove from cart
   const deleteCart = (item) => {
     dispatch(deleteFromCart(item));
-    toast.success("Product Removed from Cart");
+    toast.success("Removed from cart", {
+      icon: "🗑️",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
 
   // Toggle Wishlist
   const toggleWishlist = (item) => {
     if (wishlistItems.some((p) => p.id === item.id)) {
       dispatch(removeFromWishlist(item.id));
-      toast.success("Removed from Wishlist");
+      toast.success("Removed from wishlist", {
+        icon: "💔",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+      
     } else {
       dispatch(addToWishlist(item));
-      toast.success("Added to Wishlist");
+      toast.success("Added to wishlist", {
+        icon: "❤️",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+      
     }
   };
 
   return (
-    <div className="mt-10 px-4 md:px-8">
+    <div className="mt-15 px-4 md:px-8">
       {/* Heading */}
       <h1 className="text-center text-3xl font-semibold first-letter:uppercase text-gray-800 mb-6">
         {categoryname}
@@ -97,14 +127,14 @@ const CategoryPage = () => {
                         {cartItems.some((p) => p.id === item.id) ? (
                           <button
                             onClick={() => deleteCart(item)}
-                            className="w-full mt-3 py-2 bg-red-700 text-white rounded-bl-2xl font-semibold transition-all duration-300 hover:bg-red-600 active:scale-95"
+                            className="w-full mt-3 py-2 bg-red-700 text-white rounded-b-2xl font-semibold transition-all duration-300 hover:bg-red-600 active:scale-95"
                           >
                             Remove From Cart
                           </button>
                         ) : (
                           <button
                             onClick={() => addCart(item)}
-                            className="w-full mt-3 py-2 bg-purple-700 text-white rounded-bl-2xl font-semibold transition-all duration-300 hover:bg-pink-600 active:scale-95"
+                            className="w-full mt-3 py-2 bg-purple-700 text-white rounded-b-2xl font-semibold transition-all duration-300 hover:bg-pink-600 active:scale-95"
                           >
                             Add To Cart
                           </button>

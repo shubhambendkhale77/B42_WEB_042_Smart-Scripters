@@ -48,7 +48,7 @@ const Carousel = () => {
 
   return (
     <div className="  ">
-    <div className="relative  mr-8 ml-8 mt-10 rounded-2xl">
+    <div className="relative  mr-8 ml-8 mt-15 sm:mt-20 rounded-2xl">
       {/* Image Wrapper */}
       <div className="overflow-x-hidden">
         <div
