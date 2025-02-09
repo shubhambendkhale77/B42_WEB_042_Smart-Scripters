@@ -25,26 +25,49 @@ const wishlistSlice = createSlice({
   },
   reducers: {
     addToWishlist: (state, action) => {
-      const serializedItem = {
-        ...action.payload,
-        time: {
-          seconds: action.payload.time.seconds,
-          nanoseconds: action.payload.time.nanoseconds
-        }
-      };
-      const exists = state.wishlistItems.find(item => item.id === serializedItem.id);
+      // First, check if the item exists
+      const exists = state.wishlistItems.some(item => item.id === action.payload.id);
+      
       if (!exists) {
-        state.wishlistItems.push(serializedItem);
+        // Create a safe copy of the item, handling the time field properly
+        const safeItem = {
+          ...action.payload,
+          // Only include time if it exists and has the expected properties
+          ...(action.payload.time && {
+            time: {
+              seconds: action.payload.time?.seconds || 0,
+              nanoseconds: action.payload.time?.nanoseconds || 0
+            }
+          })
+        };
+        
+        // Remove undefined or null properties
+        Object.keys(safeItem).forEach(key => {
+          if (safeItem[key] === undefined || safeItem[key] === null) {
+            delete safeItem[key];
+          }
+        });
+
+        state.wishlistItems.push(safeItem);
         saveWishlistToStorage(state.wishlistItems);
+        
+        // Log successful addition
+        console.log('Added to wishlist:', safeItem);
       }
     },
     removeFromWishlist: (state, action) => {
       state.wishlistItems = state.wishlistItems.filter(item => item.id !== action.payload);
       saveWishlistToStorage(state.wishlistItems);
+      
+      // Log successful removal
+      console.log('Removed from wishlist:', action.payload);
     },
     clearWishlist: (state) => {
       state.wishlistItems = [];
       saveWishlistToStorage([]);
+      
+      // Log wishlist clearing
+      console.log('Wishlist cleared');
     }
   }
 });

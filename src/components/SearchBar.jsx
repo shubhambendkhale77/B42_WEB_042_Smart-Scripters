@@ -32,7 +32,7 @@ const SearchBar = () => {
                 {/* Input Field */}
                 <input
                     type="text"
-                    placeholder="Search here for exciting products"
+                    placeholder="Search"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="bg-transparent placeholder-black rounded-lg px-10 py-2 w-full outline-none text-black"

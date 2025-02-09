@@ -142,7 +142,7 @@ const DealOfDay = () => {
                     ) : (
                       <button 
                         onClick={() => addCart(item)}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
+                        className="flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700"
                       >
                         <ShoppingCart className="h-5 w-5" />
                         <span className="text-sm sm:text-base font-medium">Add to Cart</span>
@@ -166,7 +166,7 @@ const DealOfDay = () => {
         })}
       </div>
 
-      <style jsx>{`
+      <style jsx="true">{`
         @keyframes slide {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
