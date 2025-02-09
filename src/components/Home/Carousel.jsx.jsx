@@ -35,7 +35,7 @@ const Carousel = () => {
   return (
     <div className="relative w-screen overflow-hidden mt-[60px] rounded-2xl">
       {/* Outer Container with Padding */}
-      <div className="px-16">
+      <div className="px-6 sm:px-16">
         {/* Inner Carousel Container */}
         <div className="w-full h-full overflow-hidden rounded-2xl">
           <div
