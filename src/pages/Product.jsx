@@ -240,7 +240,7 @@ const AllProducts = () => {
                   </h2>
                   
                   <div className="flex items-center justify-between mb-6">
-                    <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
                       ₹{price.toLocaleString()}
                     </span>
                   </div>
@@ -257,7 +257,7 @@ const AllProducts = () => {
                     ) : (
                       <button 
                         onClick={() => addCart(item)}
-                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                        className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-700 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
                       >
                         <ShoppingCart className="h-4 w-4" />
                         Add to Cart
@@ -268,7 +268,7 @@ const AllProducts = () => {
                       onClick={() => handleAddToWishlist(item)}
                       className="p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-110 group"
                     >
-                      <Heart className={`h-5 w-5 transition-colors duration-300 ${
+                      <Heart className={` cursor-pointer h-5 w-5 transition-colors duration-300 ${
                         wishlistItems.some(wishlistItem => wishlistItem.id === item.id)
                           ? 'text-red-500 fill-red-500'
                           : 'text-gray-400 group-hover:text-red-500'

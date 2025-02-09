@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../assets/Auth/firebase";
 import { AuthContext } from "../context/useAuth";
 import { addToCart, deleteFromCart } from "../redux/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { Heart, Share2, Truck, ShoppingCart, Loader2 } from "lucide-react";
+import { Heart, Share2, Truck, ShoppingCart, Loader2, ArrowLeft, Store } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ProductInfo = () => {
@@ -14,6 +14,7 @@ const ProductInfo = () => {
   const [product, setProduct] = useState(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const getProductData = async () => {
     if (!id) return;
@@ -96,13 +97,23 @@ const ProductInfo = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="animate-spin w-15 h-15 text-gray-600" />
-        {/* <p className="text-lg text-gray-600">Loading.....</p> */}
       </div>
     );
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => navigate('/products')}
+        className="cursor-pointer group flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200 mb-6 hover:border-blue-700 transition-all"
+      >
+        <ArrowLeft className="w-4 h-4 text-gray-600 group-hover:text-blue-500 transition-colors" />
+        <Store className="w-4 h-4 text-gray-600 group-hover:text-blue-500 transition-colors" />
+        <span className="text-gray-600 group-hover:text-blue-500 font-medium transition-colors">Back to Products</span>
+      </motion.button>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Image section */}
         <div className="relative">
@@ -195,7 +206,7 @@ const ProductInfo = () => {
             ) : (
               <button
                 onClick={() => addCart(product)}
-                className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                className="cursor-pointer w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <ShoppingCart className="w-5 h-5" />
                 <span>Add to Cart</span>
