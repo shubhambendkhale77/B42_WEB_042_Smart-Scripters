@@ -12,6 +12,7 @@ import {
   FiMenu,
 } from "react-icons/fi";
 import { FaRegUser, FaSignOutAlt } from "react-icons/fa";
+import SearchBar from "../components/SearchBar"
 
 // Custom Hook
 import useLogout from "../../hooks/useLogout";
@@ -74,26 +75,7 @@ const Navbar = () => {
             className="h-10 w-auto hover:scale-110 transition-transform"
           />
         </div>
-
-        {/* <div className="flex-1 mx-8 max-w-2xl relative">
-          <div className="flex items-center bg-gray-100 dark:bg-transparent rounded-lg px-4 py-2">
-            <FiSearch className="text-gray-5100" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="ml-2 bg-transparent outline-none w-full h-10 px-2 rounded-lg dark:text-white"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          {searchQuery && (
-            <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-               Auto-suggest items here 
-            </div>
-          )}
-        </div> */}
-        <div className="flex-1 mx-8 max-w-2xl relative"><CategorySearch/></div>
+        <SearchBar/>
 
         <div className="relative flex items-center space-x-6">
           {navLinks.map((link) => (
