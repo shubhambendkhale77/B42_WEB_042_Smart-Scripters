@@ -11,6 +11,7 @@ import Features from '../components/Home/Features.jsx'
 import PageProductCard from '../components/Home/PageProductCard.jsx'
 import TrendingProducts from '../components/Home/Trending.jsx'
 import DealOfDay from '../components/Home/DealOfDay.jsx'
+import UpcomingSales from '../components/Home/UpcomingSales.jsx'
 const Home = () => {
   return (
     <div>
@@ -22,8 +23,10 @@ const Home = () => {
       <FeaturedCategories/>
       <PageProductCard/>
       <TrendingProducts/>
-      <DealOfDay/>
       <Coupons/>
+      <UpcomingSales/>
+      <DealOfDay/>
+   
       <Features/>
     </div>
   )
