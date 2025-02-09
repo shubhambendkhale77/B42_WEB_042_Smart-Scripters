@@ -1,10 +1,10 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFromWishlist } from '../redux/wishlistReducer';
-import { addToCart } from '../redux/CartSlice';
-import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
-import { Heart, ShoppingCart, ArrowLeft, Trash2 } from 'lucide-react';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromWishlist } from "../redux/wishlistReducer";
+import { addToCart } from "../redux/CartSlice";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { Heart, ShoppingCart, ArrowLeft, Trash2 } from "lucide-react";
 
 const Wishlist = () => {
   const wishlist = useSelector((state) => state.wishlist.wishlistItems);
@@ -12,25 +12,25 @@ const Wishlist = () => {
 
   const handleRemoveFromWishlist = (id) => {
     dispatch(removeFromWishlist(id));
-    toast.success('Item removed from wishlist');
+    toast.success("Item removed from wishlist");
   };
 
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
     dispatch(removeFromWishlist(item.id));
-    toast.success('Added to cart');
+    toast.success("Added to cart");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8 pt-[64px]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Link 
-            to="/" 
+        <div className="flex items-center justify-between mb-6 ">
+          <Link
+            to="/"
             className="flex items-center text-red-500 hover:text-red-500 transition"
           >
-            <ArrowLeft className="w-4 h-4 mr-1" />
+            <ArrowLeft className="w-4 h-4 mr-1 " />
             <span className="text-sm font-medium">Continue Shopping</span>
           </Link>
         </div>
@@ -65,7 +65,7 @@ const Wishlist = () => {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {wishlist.map((item) => (
-              <div 
+              <div
                 key={item.id}
                 className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition w-full h-[320px] flex flex-col"
               >
@@ -77,7 +77,7 @@ const Wishlist = () => {
                       className="w-full h-full object-contain p-2"
                     />
                   </div>
-                  
+
                   <button
                     onClick={() => handleRemoveFromWishlist(item.id)}
                     className="absolute top-2 right-2 p-1.5 bg-white/90 rounded-full shadow-sm hover:bg-gray-100 transition-colors"
@@ -87,14 +87,16 @@ const Wishlist = () => {
                 </div>
 
                 <div className="p-3 flex flex-col flex-grow bg-white">
-                  <p className="text-xs text-yellow-700 font-medium mb-1">Shop-Smart</p>
+                  <p className="text-xs text-yellow-700 font-medium mb-1">
+                    Shop-Smart
+                  </p>
                   <h3 className="text-sm font-medium text-gray-800 mb-2 line-clamp-2 flex-grow">
                     {item.title}
                   </h3>
-                  
+
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-base font-bold text-gray-900">
-                      ₹{item.price.toLocaleString('en-IN')}
+                      ₹{item.price.toLocaleString("en-IN")}
                     </span>
                     <button
                       onClick={() => handleAddToCart(item)}
