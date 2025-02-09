@@ -72,17 +72,17 @@ const Carousel = () => {
       </button>
 
       {/* Indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-3 h-3 rounded-full ${
-              index === currentIndex ? 'bg-white' : 'bg-gray-900'
-            }`}
-          />
-        ))}
-      </div>
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1">
+  {images.map((_, index) => (
+    <button
+      key={index}
+      onClick={() => setCurrentIndex(index)}
+      className={`w-[8px] h-[8px] rounded-full transition-all duration-300 ${
+        index === currentIndex ? 'bg-white' : 'bg-gray-500'
+      } sm:w-[6px] sm:h-[6px] xs:w-[4px] xs:h-[4px]`}
+    />
+  ))}
+</div>
     </div>
   );
 };
