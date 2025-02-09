@@ -7,6 +7,8 @@ import {
   ShoppingCart,
   CheckCircle,
   ArrowLeft,
+  ArrowLeftCircle,
+  ShoppingBag
 } from "lucide-react";
 import toast from "react-hot-toast";
 import {
@@ -117,10 +119,11 @@ const CartPage = () => {
         <div className="flex items-center justify-between mb-6">
           <Link
             to="/"
-            className="flex items-center text-red-500 hover:text-red-500 transition"
+            className="flex items-center text-blue-600 hover:text-blue-800 transition"
           >
-            <ArrowLeft className="w-4 h-4 mr-1" />
-            <span className="text-sm font-medium">Continue Shopping</span>
+            {/* <ArrowLeftCircle className="w-7 h-7 mr-1" /> */}
+            <ShoppingBag className="w-7 h-7 mr-1" />
+            <span className="text-lg font-medium">Continue Shopping</span>
           </Link>
         </div>
         <div className="flex items-center justify-between mb-8">
@@ -142,7 +145,7 @@ const CartPage = () => {
             <p className="text-2xl text-gray-500">Your cart is empty</p>
             <Link
               to="/"
-              className="inline-flex items-center mt-5 px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 transition-colors"
+              className="inline-flex items-center mt-5 px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-blue-600 hover:bg-purple-700 transition-colors"
             >
               Start Shopping
             </Link>
