@@ -1,27 +1,16 @@
 import React, { useState, useEffect } from "react";
+import img1 from '../../assets/Carousel/1.jpg';
+import img2 from '../../assets/Carousel/2.jpg';
+import img3 from '../../assets/Carousel/3.jpg';
+import img4 from '../../assets/Carousel/4.jpg';
+import img5 from '../../assets/Carousel/5.jpg';
+import img6 from '../../assets/Carousel/6.jpg';
+import img7 from '../../assets/Carousel/7.jpg';
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
   // Images array
-  const images1 = [
-    "https://api.spicezgold.com/download/file_1734524985581_NewProject(11).jpg",
-    "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg",
-    "https://api.spicezgold.com/download/file_1734524893797_NewProject(13).jpg",
-    "https://api.spicezgold.com/download/file_1734524930884_NewProject(6).jpg",
-    "https://api.spicezgold.com/download/file_1734524958576_NewProject(10).jpg",
-    "https://api.spicezgold.com/download/file_1734525002307_1723967638078_slideBanner1.6bbeed1a0c8ffb494f7c.jpg",
-    "https://api.spicezgold.com/download/file_1734525014348_NewProject(7).jpg",
-  ];
-  const images = [
-    "https://i.ibb.co/9mTpCZrG/1.jpg",
-    "https://i.ibb.co/dwv4z6Nq/2.jpg",
-    "https://i.ibb.co/JFWjGF0W/3.jpg",
-    "https://i.ibb.co/jPWLHBZJ/4.jpg",
-    "https://i.ibb.co/js2YLpw/5.jpg",
-    "https://i.ibb.co/ccVHB1rG/6.jpg"
-  ];
-  
+  const images = [img1, img2, img3, img4, img5, img6, img7];
 
   // Function to go to the next slide
   const nextSlide = () => {
@@ -30,15 +19,6 @@ const Carousel = () => {
     );
   };
 
-  // Auto-slide effect using setInterval
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 3000); // Change slide every 3 seconds
-
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
-
   // Function to go to the previous slide
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -46,31 +26,39 @@ const Carousel = () => {
     );
   };
 
+  // Auto-slide effect using setInterval
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="  ">
-    <div className="relative  mr-8 ml-8 mt-15 sm:mt-20 rounded-2xl">
-      {/* Image Wrapper */}
-      <div className="overflow-x-hidden">
-        <div
-          className="flex transition-transform duration-500 rounded-2xl "
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {images.map((src, index) => (
-            <img
-              key={index}
-              src={src}
-              alt={`Slide ${index + 1}`}
-              className="min-h-48 object-cover rounded-2xl"
-              loading="lazy"
-            />
-          ))}
+    <div className="relative w-screen overflow-hidden mt-[60px] rounded-2xl">
+      {/* Outer Container with Padding */}
+      <div className="px-6 sm:px-16">
+        {/* Inner Carousel Container */}
+        <div className="w-full h-full overflow-hidden rounded-2xl">
+          <div
+            className="flex transition-transform duration-1500"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {images.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt={`Slide ${index + 1}`}
+                className="w-full h-full object-cover flex-shrink-0"
+                loading="lazy"
+              />
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Previous Button */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-4  text-black p-2 bg-gray-100 opacity-50 rounded-2xl"
+        className="absolute top-1/2 left-8 text-black/50 p-2 bg-black/0 bg-opacity-50 rounded-full transform -translate-y-1/2"
       >
         ❮
       </button>
@@ -78,11 +66,23 @@ const Carousel = () => {
       {/* Next Button */}
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-4  text-black p-2 bg-gray-100 opacity-50 rounded-2xl"
+        className="absolute top-1/2 right-8 text-black/50 p-2 bg-black/0 bg-opacity-50 rounded-full transform -translate-y-1/2"
       >
         ❯
       </button>
-    </div>
+
+      {/* Indicators */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-1">
+  {images.map((_, index) => (
+    <button
+      key={index}
+      onClick={() => setCurrentIndex(index)}
+      className={`w-[8px] h-[8px] rounded-full transition-all duration-300 ${
+        index === currentIndex ? 'bg-white' : 'bg-gray-500'
+      } sm:w-[6px] sm:h-[6px] xs:w-[4px] xs:h-[4px]`}
+    />
+  ))}
+</div>
     </div>
   );
 };

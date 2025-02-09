@@ -4,7 +4,7 @@ import { SiTicktick } from "react-icons/si";
 import { MdHeadsetMic } from "react-icons/md";
 
 
-const cute2 ='https://github.com/priyankauppada/shopstic/blob/main/src/assets/cute2.jpg?raw=true';
+const cute2 ='https://cdn.shopify.com/s/files/1/0070/7032/articles/subscription-ecommerce.png?v=1738939214';
 const Features= () => {
   const icons = [
     { icon: <RiExchangeFundsLine/>, title: 'Easy Exchange Policy', description: 'We offer hassle free exchange policy' },
@@ -13,21 +13,21 @@ const Features= () => {
   ];
 
   return (
-    <div className='bg-gradient-to-b from-blue-100 to-purple-600 pt-8 mr-10 ml-10 mt-12 rounded-2xl'>
-        <div className="container flex flex-col justify-around sm:flex-row  mx-auto pb-10  ">
+    <div className='bg-gradient-to-b from-orange-400 to-orange-700 text-white pt-8 mr-10 ml-10 mt-12 rounded-2xl'>
+        <div className="container flex flex-col justify-around sm:flex-row  mx-auto pb-1  ">
         {icons.map((icon, index) => (
             <div key={index} className='py-6'>
                 <div className="flex flex-col items-center my-10 ">
                         <span className="text-5xl pb-4">{icon.icon}</span>
-                        <h3 className='text-gray-800 font-semibold'>{icon.title}</h3>
-                        <p className='text-gray-900 text-sm '>{icon.description}</p>
+                        <h3 className='text-white font-semibold'>{icon.title}</h3>
+                        <p className='text-black text-sm '>{icon.description}</p>
                 </div>
             </div>
         ))}
         </div>
-        <div className='flex flex-col items-center md:flex-row justify-around p-10 '>
+        <div className='flex flex-col items-center md:flex-row justify-around p-1 '>
             <div className=''>
-                <img src={cute2} className='h-40 rounded-lg mb-10'/>
+                <img src={cute2} className='h-30 rounded-lg mb-10'/>
             </div>
             <div className='text-center'>
                 <h2 className='sm:text-lg md:text-3xl font-bold my-4'>Subscribe now & get 20% off </h2>

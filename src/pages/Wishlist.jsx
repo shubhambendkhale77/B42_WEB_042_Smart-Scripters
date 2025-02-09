@@ -1,117 +1,211 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromWishlist } from "../redux/wishlistReducer";
 import { addToCart } from "../redux/CartSlice";
-import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
-import { Heart, ShoppingCart, ArrowLeft, Trash2 } from "lucide-react";
+import { 
+  Heart, 
+  ShoppingCart, 
+  ArrowLeftCircle, 
+  Trash2, 
+  Star, 
+  Tag, 
+  Store,
+  CheckCircle,
+  XCircle
+} from "lucide-react";
+
+// Custom Toast component
+const Toast = ({ message, type }) => {
+  return (
+    <div className={`
+      flex items-center gap-3 py-3 px-4 rounded-lg shadow-lg
+      ${type === 'success' 
+        ? 'bg-green-500 text-white' 
+        : 'bg-red-500 text-white'
+      }
+      transform transition-all duration-300 ease-in-out
+    `}>
+      {type === 'success' ? (
+        <CheckCircle className="h-5 w-5" />
+      ) : (
+        <XCircle className="h-5 w-5" />
+      )}
+      <p className="text-sm font-medium">{message}</p>
+    </div>
+  );
+};
+
+// Toast Container component
+const ToastContainer = ({ toasts }) => {
+  return (
+<div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 flex flex-col gap-2">
+{toasts.map((toast) => (
+        <div
+          key={toast.id}
+          className="animate-toast-slide-up"
+        >
+          <Toast message={toast.message} type={toast.type} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Rest of the components remain the same
+const BackToShopping = () => (
+  <div className="mb-8">
+    <a href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-300">
+      <ArrowLeftCircle className="w-5 h-5" />
+      <Store className="w-5 h-5" />
+      <span className="font-medium">Continue Shopping</span>
+    </a>
+  </div>
+);
+
+const AnimatedRating = ({ rating }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className={`flex items-center gap-1 transition-transform duration-300 ${
+        isHovered ? "scale-110" : ""
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Star className="w-4 h-4 text-yellow-400" />
+      <span className="text-sm font-medium">{rating}</span>
+    </div>
+  );
+};
+
+const AnimatedDiscount = ({ discount }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className={`flex items-center gap-1 transition-transform duration-300 ${
+        isHovered ? "scale-110" : ""
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Tag className="w-4 h-4 text-green-500" />
+      <span className="text-sm font-medium text-green-500">{discount}</span>
+    </div>
+  );
+};
+
+const WishlistHeader = ({ itemCount }) => (
+  <div className="mb-8">
+    <div className="flex items-center gap-3">
+      <Heart className="w-6 h-6 text-red-500" />
+      <h1 className="text-2xl font-bold">My Wishlist ({itemCount})</h1>
+    </div>
+  </div>
+);
+
+const EmptyWishlist = () => (
+  <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+    <Heart className="w-16 h-16 text-gray-300 mb-4" />
+    <h3 className="text-xl font-semibold mb-2">Your wishlist is empty</h3>
+    <p className="text-gray-500 mb-6">Discover and save your favorite items</p>
+    <a
+      href="/"
+      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+    >
+      Start Shopping
+    </a>
+  </div>
+);
+
+const WishlistItem = ({ item, onRemove, onAddToCart }) => (
+  <div className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="relative aspect-square">
+      <img
+        src={item.productImageUrl}
+        alt={item.title}
+        className="w-full h-full object-cover"
+      />
+      <button
+        onClick={() => onRemove(item.id)}
+        className="cursor-pointer absolute top-2 right-2 p-2 bg-white/80 rounded-full hover:bg-red-50 transition-colors duration-300"
+      >
+        <Trash2 className="w-5 h-5 text-red-500" />
+      </button>
+    </div>
+
+    <div className="p-4">
+      <p className="text-sm text-gray-500 mb-1">Shop-Smart</p>
+      <h3 className="font-semibold text-lg mb-2 line-clamp-2">{item.title}</h3>
+      <div className="flex items-center gap-4 mb-4">
+        <AnimatedRating rating={item.rating} />
+        <AnimatedDiscount discount={item.discount} />
+      </div>
+      <div className="flex items-center justify-between">
+        <span className="text-xl text-blue-700 font-bold">₹{item.price.toLocaleString("en-IN")}</span>
+        <button
+          onClick={() => onAddToCart(item)}
+          className="cursor-pointer flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition-colors duration-300"
+        >
+          <ShoppingCart className="w-4 h-4" />
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+);
 
 const Wishlist = () => {
   const wishlist = useSelector((state) => state.wishlist.wishlistItems);
   const dispatch = useDispatch();
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(currentToasts => [...currentToasts, { id, message, type }]);
+    setTimeout(() => removeToast(id), 3000);
+  };
+
+  const removeToast = (id) => {
+    setToasts(currentToasts => 
+      currentToasts.filter(toast => toast.id !== id)
+    );
+  };
 
   const handleRemoveFromWishlist = (id) => {
     dispatch(removeFromWishlist(id));
-    toast.success("Item removed from wishlist");
+    addToast('Item removed from wishlist', 'error');
   };
 
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
     dispatch(removeFromWishlist(item.id));
-    toast.success("Added to cart");
+    addToast('Item added to cart successfully');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8 pt-[64px]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6 ">
-          <Link
-            to="/"
-            className="flex items-center text-red-500 hover:text-red-500 transition"
-          >
-            <ArrowLeft className="w-4 h-4 mr-1 " />
-            <span className="text-sm font-medium">Continue Shopping</span>
-          </Link>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="space-y-8">
+        <BackToShopping />
+        <WishlistHeader itemCount={wishlist.length} />
 
-        {/* Wishlist Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-2">
-            <Heart className="w-5 h-5 text-rose-500" />
-            <h1 className="text-xl font-bold text-gray-800">
-              My Wishlist ({wishlist.length})
-            </h1>
-          </div>
-        </div>
-
-        {/* Empty State */}
         {wishlist.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-purple-100">
-            <Heart className="w-12 h-12 text-purple-200 mx-auto mb-3" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Your wishlist is empty
-            </h3>
-            <p className="text-gray-500 mb-6 text-sm">
-              Discover and save your favorite items
-            </p>
-            <Link
-              to="/"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 transition-colors"
-            >
-              Start Shopping
-            </Link>
-          </div>
+          <EmptyWishlist />
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {wishlist.map((item) => (
-              <div
+              <WishlistItem
                 key={item.id}
-                className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition w-full h-[320px] flex flex-col"
-              >
-                <div className="relative w-full h-[200px] bg-gray-50">
-                  <div className="w-full h-full flex items-center justify-center overflow-hidden">
-                    <img
-                      src={item.productImageUrl}
-                      alt={item.title}
-                      className="w-full h-full object-contain p-2"
-                    />
-                  </div>
-
-                  <button
-                    onClick={() => handleRemoveFromWishlist(item.id)}
-                    className="absolute top-2 right-2 p-1.5 bg-white/90 rounded-full shadow-sm hover:bg-gray-100 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4 text-rose-500" />
-                  </button>
-                </div>
-
-                <div className="p-3 flex flex-col flex-grow bg-white">
-                  <p className="text-xs text-yellow-700 font-medium mb-1">
-                    Shop-Smart
-                  </p>
-                  <h3 className="text-sm font-medium text-gray-800 mb-2 line-clamp-2 flex-grow">
-                    {item.title}
-                  </h3>
-
-                  <div className="flex items-center justify-between mt-auto">
-                    <span className="text-base font-bold text-gray-900">
-                      ₹{item.price.toLocaleString("en-IN")}
-                    </span>
-                    <button
-                      onClick={() => handleAddToCart(item)}
-                      className="inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded-full text-white bg-red-400 hover:bg-red-500 transition-colors"
-                    >
-                      <ShoppingCart className="w-3 h-3 mr-1" />
-                      Add
-                    </button>
-                  </div>
-                </div>
-              </div>
+                item={item}
+                onRemove={handleRemoveFromWishlist}
+                onAddToCart={handleAddToCart}
+              />
             ))}
           </div>
         )}
       </div>
+      <ToastContainer toasts={toasts} />
     </div>
   );
 };

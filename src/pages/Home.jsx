@@ -9,7 +9,8 @@ import FeaturedCategories from '../components/Home/FeaturedCategories.jsx'
 import Coupons from '../components/Home/Coupons.jsx'
 import Features from '../components/Home/Features.jsx'
 import PageProductCard from '../components/Home/PageProductCard.jsx'
-
+import TrendingProducts from '../components/Home/Trending.jsx'
+import DealOfDay from '../components/Home/DealOfDay.jsx'
 const Home = () => {
   return (
     <div>
@@ -20,6 +21,8 @@ const Home = () => {
       <Carousel/>
       <FeaturedCategories/>
       <PageProductCard/>
+      <TrendingProducts/>
+      <DealOfDay/>
       <Coupons/>
       <Features/>
     </div>

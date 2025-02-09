@@ -66,13 +66,13 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop/Tablet Navigation */}
-      <nav className="hidden md:flex items-center justify-between p-2 bg-gradient-to-r from-blue-900 to-purple-900 shadow-lg sticky top-0 z-50">
+      <nav className="hidden md:flex items-center justify-between p-2 bg-gradient-to-t from-transparent to-transparent shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-4">
           <img
             src="https://i.ibb.co/WN7vgHrT/Shop-Smart1.png"
             alt="Shop-Smart"
             onClick={() => navigate("/")} 
-            className="h-10 w-auto hover:scale-110 transition-transform"
+            className="h-10 w-auto hover:scale-110 transition-transform ml-3"
           />
         </div>
         <SearchBar/>
@@ -85,8 +85,8 @@ const Navbar = () => {
   className={({ isActive }) =>
     `relative flex items-center space-x-2 p-2 rounded-lg transition-colors ${
       isActive
-        ? "text-blue-600 dark:text-blue-300"
-        : "text-gray-600 dark:text-gray-300"
+        ? "text-blue-600 dark:text-black"
+        : "text-gray-600 dark:text-black"
     }`
   }
   onClick={link.onClick}
@@ -96,7 +96,7 @@ const Navbar = () => {
       {isActive && (
         <motion.div
           layoutId="activeNav"
-          className="absolute inset-0 bg-blue-900 dark:bg-purple-600 rounded-lg"
+          className="absolute inset-0 bg-blue-900 dark:bg-black/10 rounded-lg"
           transition={{
             type: "spring",
             stiffness: 500,
@@ -117,7 +117,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden fixed top-0 w-full bg-gradient-to-r from-blue-900 to-purple-900 border-t border-gray-200 dark:border-gray-800 z-50">
+      <nav className="md:hidden fixed top-0 w-full bg-gradient-to-r from-purple-700 to-blue-500 border-t border-gray-200 dark:border-gray-800 z-50">
         <div className="relative flex justify-around items-center p-2">
           {navLinks.slice(0, 4).map((link) => (
             <NavLink
@@ -126,8 +126,8 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `relative p-3 rounded-full ${
                   isActive
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "text-gray-600 dark:text-gray-300"
+                    ? "text-blue-600 dark:text-white"
+                    : "text-gray-600 dark:text-white"
                 }`
               }
             >
@@ -169,7 +169,7 @@ const Navbar = () => {
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="absolute bottom-0 w-full bg-white dark:bg-gray-900 rounded-t-2xl p-4"
+        className="absolute bottom-0 w-full bg-white bg-gradient-to-r from-purple-700 to-blue-500 rounded-t-2xl p-4"
         onClick={(e) => e.stopPropagation()}
       >
         {navLinks.map((link) => (
@@ -179,8 +179,8 @@ const Navbar = () => {
             className={({ isActive }) =>
               `flex items-center space-x-3 p-4 ${
                 isActive
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "text-gray-600 dark:text-gray-300"
+                  ? "text-blue-600 dark:text-white"
+                  : "text-gray-600 dark:text-white"
               }`
             }
             onClick={() => setIsMenuOpen(false)}
