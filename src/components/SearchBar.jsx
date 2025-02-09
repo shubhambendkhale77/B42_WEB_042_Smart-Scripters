@@ -20,7 +20,7 @@ const SearchBar = () => {
     return (
         <div className="relative w-96 lg:w-96 md:w-96 mx-auto">
             {/* Search Input with Icon */}
-            <div className="relative">
+            <div className="relative border border-gray-300 rounded-lg focus-within:border-black transition duration-300">
                 {/* Search Icon */}
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg" />
 
@@ -30,7 +30,7 @@ const SearchBar = () => {
                     placeholder="Search here for exciting products"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="bg-gray-200 placeholder-gray-400 rounded-lg px-10 py-2 w-full outline-none text-black"
+                    className="bg-transparent placeholder-black rounded-lg px-10 py-2 w-full outline-none text-black"
                 />
             </div>
 
