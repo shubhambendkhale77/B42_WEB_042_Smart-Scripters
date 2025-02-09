@@ -72,7 +72,7 @@ const Navbar = () => {
             src="https://i.ibb.co/WN7vgHrT/Shop-Smart1.png"
             alt="Shop-Smart"
             onClick={() => navigate("/")} 
-            className="h-10 w-auto hover:scale-110 transition-transform"
+            className="h-10 w-auto hover:scale-110 transition-transform ml-3"
           />
         </div>
         <SearchBar/>
@@ -96,7 +96,7 @@ const Navbar = () => {
       {isActive && (
         <motion.div
           layoutId="activeNav"
-          className="absolute inset-0 bg-blue-900 dark:bg-white/50 rounded-lg"
+          className="absolute inset-0 bg-blue-900 dark:bg-black/10 rounded-lg"
           transition={{
             type: "spring",
             stiffness: 500,

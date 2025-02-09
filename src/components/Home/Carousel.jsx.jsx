@@ -57,7 +57,7 @@ const Carousel = () => {
       {/* Previous Button */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-4 text-white p-2 bg-black bg-opacity-50 rounded-full transform -translate-y-1/2"
+        className="absolute top-1/2 left-4 text-white p-2 bg-black/40 bg-opacity-50 rounded-full transform -translate-y-1/2"
       >
         ❮
       </button>
@@ -65,7 +65,7 @@ const Carousel = () => {
       {/* Next Button */}
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-4 text-white p-2 bg-black bg-opacity-50 rounded-full transform -translate-y-1/2"
+        className="absolute top-1/2 right-8 text-white p-2 bg-black/40 bg-opacity-50 rounded-full transform -translate-y-1/2"
       >
         ❯
       </button>
