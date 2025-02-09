@@ -2,14 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Menu, Transition } from '@headlessui/react';
-import {
-  Heart,
-  ShoppingCart,
-  Trash2,
-  SlidersHorizontal,
-  Star,
-  ChevronDown,
-  Sparkles
+import { 
+  Heart, 
+  ShoppingCart, 
+  Trash2, 
+  SlidersHorizontal, 
+  Star, 
+  ChevronDown, 
+  X,
+  ArrowUpDown,
+  Eye
 } from "lucide-react";
 import { AuthContext } from "../context/useAuth";
 import { addToCart, deleteFromCart } from "../redux/CartSlice";
@@ -24,15 +26,29 @@ const AllProducts = () => {
   const wishlistItems = useSelector((state) => state.wishlist.wishlistItems);
   const dispatch = useDispatch();
 
+  const maxPrice = Math.max(...getAllProduct.map(product => product.price));
+
+  // State for filters and sorting
   const [filteredProducts, setFilteredProducts] = useState(getAllProduct);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedRating, setSelectedRating] = useState(0);
   const [sortOption, setSortOption] = useState("default");
+  const [priceRange, setPriceRange] = useState({
+    min: 0,
+    max: maxPrice
+  });
+  const [minDiscount, setMinDiscount] = useState(0);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [imageError, setImageError] = useState({});
-  const [hoveredProduct, setHoveredProduct] = useState(null);
 
-  const categories = [
-    "all",
-    ...new Set(getAllProduct.map((item) => item.category)),
+  const categories = ["all", ...new Set(getAllProduct.map((item) => item.category))];
+
+  const sortOptions = [
+    { value: "default", label: "Default" },
+    { value: "price-asc", label: "Price: Low to High" },
+    { value: "price-desc", label: "Price: High to Low" },
+    { value: "rating-desc", label: "Rating: High to Low" },
+    { value: "rating-asc", label: "Rating: Low to High" }
   ];
 
   const handleImageError = (id) => {
@@ -42,59 +58,82 @@ const AllProducts = () => {
     }));
   };
 
+  const handlePriceChange = (e) => {
+    const value = parseInt(e.target.value);
+    setPriceRange(prev => ({
+      ...prev,
+      [e.target.name]: value
+    }));
+  };
+
+  // Filter and sort products
   useEffect(() => {
     let result = [...getAllProduct];
-
+    
+    // Apply filters
     if (selectedCategory !== "all") {
       result = result.filter((item) => item.category === selectedCategory);
     }
 
-    if (sortOption === "price-asc") {
-      result.sort((a, b) => a.price - b.price);
-    } else if (sortOption === "price-desc") {
-      result.sort((a, b) => b.price - a.price);
-    } else if (sortOption === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
+    if (selectedRating > 0) {
+      result = result.filter((item) => item.rating >= selectedRating);
+    }
+
+    result = result.filter(
+      (item) => item.price >= priceRange.min && item.price <= priceRange.max
+    );
+
+    if (minDiscount > 0) {
+      result = result.filter((item) => (item.discount || 0) >= minDiscount);
+    }
+
+    // Apply sorting
+    switch (sortOption) {
+      case "price-asc":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case "rating-desc":
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+      case "rating-asc":
+        result.sort((a, b) => a.rating - b.rating);
+        break;
+      default:
+        break;
     }
 
     setFilteredProducts(result);
-  }, [getAllProduct, selectedCategory, sortOption]);
+  }, [getAllProduct, selectedCategory, selectedRating, priceRange, minDiscount, sortOption]);
 
+  const resetFilters = () => {
+    setSelectedCategory("all");
+    setSelectedRating(0);
+    setPriceRange({
+      min: 0,
+      max: maxPrice
+    });
+    setMinDiscount(0);
+    setSortOption("default");
+  };
+
+  // Cart and wishlist functions
   const addCart = (item) => {
     dispatch(addToCart(item));
-    toast.success("Added to cart", {
-      icon: '🛍️',
-      style: {
-        borderRadius: '10px',
-        background: '#333',
-        color: '#fff',
-      },
-    });
+    toast.success("Added to cart");
   };
 
   const deleteCart = (item) => {
     dispatch(deleteFromCart(item));
-    toast.success("Removed from cart", {
-      icon: '🗑️',
-      style: {
-        borderRadius: '10px',
-        background: '#333',
-        color: '#fff',
-      },
-    });
+    toast.success("Removed from cart");
   };
 
   const handleAddToWishlist = (product) => {
     const exists = wishlistItems.find((item) => item.id === product.id);
     if (exists) {
-      toast.error("Already in wishlist", {
-        icon: '💔',
-        style: {
-          borderRadius: '10px',
-          background: '#333',
-          color: '#fff',
-        },
-      });
+      toast.error("Already in wishlist");
     } else {
       const serializedProduct = {
         ...product,
@@ -104,182 +143,283 @@ const AllProducts = () => {
         },
       };
       dispatch(addToWishlist(serializedProduct));
-      toast.success("Added to wishlist", {
-        icon: '❤️',
-        style: {
-          borderRadius: '10px',
-          background: '#333',
-          color: '#fff',
-        },
-      });
+      toast.success("Added to wishlist");
     }
   };
 
-  const getRatingColor = (rating) => {
-    if (rating >= 4.5) return 'bg-emerald-500';
-    if (rating >= 4) return 'bg-green-500';
-    if (rating >= 3.5) return 'bg-yellow-500';
-    return 'bg-orange-500';
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
-      <div className="container mx-auto px-4 py-8">
-        {/* Filters Section */}
-        <div className="mb-8 backdrop-blur-md bg-white/80 rounded-2xl shadow-lg p-6 top-4 z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="flex flex-wrap gap-3">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-2.5 rounded-xl capitalize transition-all duration-300 transform hover:scale-105 ${
-                    selectedCategory === category
-                      ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
-                      : "bg-white hover:bg-gray-50 shadow-sm hover:shadow border border-gray-100"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Categories at the top */}
+      <div className="mb-8">
+        <div className="flex gap-3 pb-2 overflow-x-auto scrollbar-hide">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`
+                whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium
+                transition-all duration-200 transform hover:scale-105
+                ${selectedCategory === category
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                  : "bg-white text-gray-700 border border-gray-200 hover:border-blue-400"}
+              `}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
 
-            <Menu as="div" className="relative">
-              <Menu.Button className="flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300">
-                <SlidersHorizontal className="h-4 w-4 text-gray-500" />
-                Sort by
-                <ChevronDown className="h-4 w-4 text-gray-500" />
-              </Menu.Button>
-              <Transition
-                enter="transition duration-200 ease-out"
-                enterFrom="transform scale-95 opacity-0"
-                enterTo="transform scale-100 opacity-100"
-                leave="transition duration-150 ease-out"
-                leaveFrom="transform scale-100 opacity-100"
-                leaveTo="transform scale-95 opacity-0"
-              >
-                <Menu.Items className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl p-2 z-10">
-                  {['default', 'price-asc', 'price-desc', 'rating'].map((option) => (
-                    <Menu.Item key={option}>
+      {/* Filter and Sort Controls */}
+      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg 
+                     shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-colors duration-200"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            Filters
+          </button>
+
+          {/* Sort Dropdown */}
+          <Menu as="div" className="relative">
+            <Menu.Button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 
+                                  rounded-lg hover:border-blue-400 transition-colors duration-200">
+              <ArrowUpDown className="w-4 h-4" />
+              Sort by
+              <ChevronDown className="w-4 h-4" />
+            </Menu.Button>
+            <Transition
+              enter="transition duration-100 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-75 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <Menu.Items className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 focus:outline-none z-10 overflow-hidden">
+                <div className="p-1">
+                  {sortOptions.map((option) => (
+                    <Menu.Item key={option.value}>
                       {({ active }) => (
                         <button
+                          onClick={() => setSortOption(option.value)}
                           className={`${
-                            active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
-                          } group flex w-full items-center rounded-lg px-4 py-3 text-sm capitalize transition-colors duration-200`}
-                          onClick={() => setSortOption(option)}
+                            active ? 'bg-blue-50' : ''
+                          } ${
+                            sortOption === option.value ? 'text-blue-600 font-medium' : 'text-gray-700'
+                          } group flex w-full items-center rounded-lg px-4 py-2.5 text-sm transition-colors duration-200`}
                         >
-                          {option.replace('-', ' ')}
+                          {option.label}
                         </button>
                       )}
                     </Menu.Item>
                   ))}
-                </Menu.Items>
-              </Transition>
-            </Menu>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
+        </div>
+
+        {/* Clear Filters */}
+        {(selectedCategory !== "all" || selectedRating > 0 || minDiscount > 0 || 
+          priceRange.min > 0 || priceRange.max < maxPrice ||
+          sortOption !== "default") && (
+          <button 
+            onClick={resetFilters}
+            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800
+                     transition-colors duration-200"
+          >
+            Clear All <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Filter Panel */}
+      <Transition
+        show={isFilterOpen}
+        enter="transition ease-out duration-300"
+        enterFrom="opacity-0 -translate-y-2"
+        enterTo="opacity-100 translate-y-0"
+        leave="transition ease-in duration-200"
+        leaveFrom="opacity-100 translate-y-0"
+        leaveTo="opacity-0 -translate-y-2"
+      >
+        <div className="bg-white p-6 rounded-xl shadow-xl mb-8 border border-gray-100">
+          {/* Rating Filter */}
+          <div className="mb-6">
+            <h3 className="font-semibold mb-3 text-gray-800">Minimum Rating</h3>
+            <div className="flex gap-2">
+              {[0, 1, 2, 3, 4, 5].map((rating) => (
+                <button
+                  key={rating}
+                  onClick={() => setSelectedRating(rating)}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all duration-200
+                    ${selectedRating === rating
+                      ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
+                >
+                  {rating === 0 ? "All" : (
+                    <>
+                      {rating} <Star className="w-4 h-4 fill-current" />
+                    </>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Price Range Slider */}
+          <div className="mb-6">
+            <h3 className="font-semibold mb-3 text-gray-800">Price Range</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>₹{priceRange.min.toLocaleString()}</span>
+                <span>₹{priceRange.max.toLocaleString()}</span>
+              </div>
+              <div className="space-y-4">
+                <input
+                  type="range"
+                  name="min"
+                  min={0}
+                  max={maxPrice}
+                  value={priceRange.min}
+                  onChange={handlePriceChange}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer
+                           [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 
+                           [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:rounded-full
+                           [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-lg"
+                />
+                <input
+                  type="range"
+                  name="max"
+                  min={0}
+                  max={maxPrice}
+                  value={priceRange.max}
+                  onChange={handlePriceChange}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer
+                           [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 
+                           [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:rounded-full
+                           [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-lg"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Discount Filter */}
+          <div>
+            <h3 className="font-semibold mb-3 text-gray-800">Minimum Discount</h3>
+            <div className="flex gap-2">
+              {[0, 10, 20, 30, 50].map((discount) => (
+                <button
+                  key={discount}
+                  onClick={() => setMinDiscount(discount)}
+                  className={`px-4 py-2 rounded-lg transition-all duration-200
+                    ${minDiscount === discount
+                      ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
+                >
+                  {discount === 0 ? "All" : `${discount}%+`}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
+      </Transition>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredProducts.map((item, index) => {
-            const { id, title, price, productImageUrl, discount, rating } = item;
-            const isInCart = cartItems.some((p) => p.id === item.id);
-            const isHovered = hoveredProduct === id;
-
-            return (
-              <div 
-                key={index} 
-                className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-                onMouseEnter={() => setHoveredProduct(id)}
-                onMouseLeave={() => setHoveredProduct(null)}
-              >
-                <div 
-                  className="relative h-72 cursor-pointer overflow-hidden"
-                  onClick={() => navigate(`/productinfo/${id}`)}
-                >
-                  {!imageError[id] ? (
-                    <img
-                      src={productImageUrl}
-                      alt={title}
+      {/* Products Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {filteredProducts.map((item, index) => {
+          const { id, title, price, productImageUrl, discount, rating } = item;
+          const isInCart = cartItems.some((p) => p.id === item.id);
+          return (
+            <div 
+              key={index}
+              className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 
+                       overflow-hidden group relative"
+            >
+              {/* Image Container with Hover Effect */}
+              <div className="relative aspect-square overflow-hidden">
+                {!imageError[id] ? (
+                  <>
+                    <img 
+                      src={productImageUrl} 
+                      alt={title} 
                       onError={() => handleImageError(id)}
-                      className={`w-full h-full object-cover object-center transition-all duration-700 ${
-                        isHovered ? 'scale-110 blur-sm brightness-75' : 'scale-100'
-                      }`}
+                      className="w-full h-full object-cover group-hover:blur-sm transition-all duration-300"
                     />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                      <span className="text-gray-400">Image not available</span>
-                    </div>
-                  )}
-                  
-                  {/* Animated overlay on hover */}
-                  <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
-                    isHovered ? 'opacity-100' : 'opacity-0'
-                  }`}>
-                    <div className="text-white text-lg font-medium flex items-center gap-2">
-                      <Sparkles className="h-5 w-5" />
-                      View Details
-                    </div>
-                  </div>
-
-                  {discount && (
-                    <div className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-medium transform rotate-3 shadow-lg">
-                      {discount}% OFF
-                    </div>
-                  )}
-                  
-                  <div className={`absolute top-4 left-4 ${getRatingColor(rating)} text-white px-3 py-1.5 rounded-xl text-sm font-medium flex items-center gap-1.5 shadow-lg`}>
-                    <Star className="h-4 w-4 fill-current" />
-                    {rating}
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h2 className="text-lg font-semibold mb-3 text-gray-800 line-clamp-2 min-h-[3.5rem]">
-                    {title}
-                  </h2>
-                  
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                      ₹{price.toLocaleString()}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-3">
-                    {isInCart ? (
-                      <button 
-                        onClick={() => deleteCart(item)}
-                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 
+                                  group-hover:opacity-100 transition-opacity duration-300">
+                      <button
+                        onClick={() => navigate(`/productinfo/${id}`)}
+                        className="flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full
+                                 text-blue-600 font-medium transform hover:scale-105 transition-all"
                       >
-                        <Trash2 className="h-4 w-4" />
-                        Remove
+                        <Eye className="w-4 h-4" />
+                        View Details
                       </button>
-                    ) : (
-                      <button 
-                        onClick={() => addCart(item)}
-                        className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-700 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                      >
-                        <ShoppingCart className="h-4 w-4" />
-                        Add to Cart
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => handleAddToWishlist(item)}
-                      className="p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-110 group"
-                    >
-                      <Heart className={` cursor-pointer h-5 w-5 transition-colors duration-300 ${
-                        wishlistItems.some(wishlistItem => wishlistItem.id === item.id)
-                          ? 'text-red-500 fill-red-500'
-                          : 'text-gray-400 group-hover:text-red-500'
-                      }`} />
-                    </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                    Image not available
                   </div>
+                )}
+              </div>
+
+              {/* Discount and Rating Badge */}
+              <div className="absolute top-4 left-4 right-4 flex justify-between">
+                {discount > 0 && (
+                  <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium
+                                shadow-lg shadow-red-500/30">
+                    {discount}% OFF
+                  </span>
+                )}
+                <div className="flex items-center gap-1 bg-white/90 px-3 py-1 rounded-full 
+                            shadow-lg text-yellow-500">
+                  <Star className="w-4 h-4 fill-current" />
+                  <span className="font-medium">{rating}</span>
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              {/* Product Info */}
+              <div className="p-4">
+                <h2 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-2">{title}</h2>
+                <span className="text-xl font-bold text-blue-600">₹{price.toLocaleString()}</span>
+                
+                {/* Actions */}
+                <div className="flex justify-between gap-2 mt-4">
+                  {isInCart ? (
+                    <button 
+                      onClick={() => deleteCart(item)}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-red-500 
+                               text-white rounded-lg hover:bg-red-600 flex-grow transition-colors
+                               shadow-lg shadow-red-500/30"
+                    >
+                      <Trash2 className="w-4 h-4" /> Remove
+                    </button>
+                  ) : (
+                    <button 
+                      onClick={() => addCart(item)}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 
+                               text-white rounded-lg hover:bg-blue-700 flex-grow transition-colors
+                               shadow-lg shadow-blue-500/30"
+                    >
+                      <ShoppingCart className="w-4 h-4" /> Add to Cart
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => handleAddToWishlist(item)}
+                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                    <Heart className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
