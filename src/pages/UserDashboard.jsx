@@ -2,12 +2,14 @@ import React, { useContext } from "react";
 import { AuthContext } from "../context/useAuth";
 import { User, Package, Calendar, Mail, Star, CreditCard, ShoppingBag } from "lucide-react";
 import { auth, db } from "../assets/Auth/firebase";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const { loading, getAllOrder, currentUser } = useContext(AuthContext);
   const userId = user?.uid || currentUser?.uid;
   const filteredOrders = getAllOrder.filter((obj) => obj.userid === userId);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 px-4 py-8">
@@ -72,9 +74,10 @@ const UserDashboard = () => {
             {filteredOrders.map((order) =>
               order.cartItems.map((item, index) => (
                 <div
+                  onClick={() => navigate("/OrderTracker")}
                   key={index}
                   className="bg-gradient-to-r from-white to-indigo-50 rounded-xl border border-indigo-100 p-6 space-y-4 hover:shadow-lg transition-all duration-300"
-                >
+                 >
                   {/* Order Header */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div className="p-3 bg-white rounded-lg shadow-sm">

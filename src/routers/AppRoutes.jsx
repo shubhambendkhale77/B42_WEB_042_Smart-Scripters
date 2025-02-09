@@ -32,6 +32,7 @@ const AppRoutes = () => {
       <Route path="/tracker"  element={<OrderTracker/>}  />
       <Route path="/updateproduct/:id"element={<UpdateProductPage />} />
       <Route path="/category/:categoryname" element={<CategoryPage/>}/>
+      <Route path="/OrderTracker" element={<OrderTracker/>}/>
     </Routes>
   );
 };

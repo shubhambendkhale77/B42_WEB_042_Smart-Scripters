@@ -11,7 +11,8 @@ import {
   ChevronDown, 
   X,
   ArrowUpDown,
-  Eye
+  Eye,
+  Loader
 } from "lucide-react";
 import { AuthContext } from "../context/useAuth";
 import { addToCart, deleteFromCart } from "../redux/CartSlice";
@@ -26,22 +27,26 @@ const AllProducts = () => {
   const wishlistItems = useSelector((state) => state.wishlist.wishlistItems);
   const dispatch = useDispatch();
 
-  const maxPrice = Math.max(...getAllProduct.map(product => product.price));
+  // Loading and error states
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Initialize maxPrice with a default value
+  const [maxPrice, setMaxPrice] = useState(10000);
 
   // State for filters and sorting
-  const [filteredProducts, setFilteredProducts] = useState(getAllProduct);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedRating, setSelectedRating] = useState(0);
   const [sortOption, setSortOption] = useState("default");
   const [priceRange, setPriceRange] = useState({
     min: 0,
-    max: maxPrice
+    max: 10000
   });
   const [minDiscount, setMinDiscount] = useState(0);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [imageError, setImageError] = useState({});
-
-  const categories = ["all", ...new Set(getAllProduct.map((item) => item.category))];
+  const [categories, setCategories] = useState(["all"]);
 
   const sortOptions = [
     { value: "default", label: "Default" },
@@ -51,6 +56,38 @@ const AllProducts = () => {
     { value: "rating-asc", label: "Rating: Low to High" }
   ];
 
+  // Initialize products and categories
+  useEffect(() => {
+    const initializeProducts = () => {
+      try {
+        setIsLoading(true);
+        
+        if (!getAllProduct || getAllProduct.length === 0) {
+          setError("No products available");
+          return;
+        }
+
+        const maxProductPrice = Math.max(...getAllProduct.map(product => product.price));
+        setMaxPrice(maxProductPrice);
+        setPriceRange(prev => ({ ...prev, max: maxProductPrice }));
+
+        const uniqueCategories = ["all", ...new Set(getAllProduct.map((item) => item.category))];
+        setCategories(uniqueCategories);
+
+        setFilteredProducts(getAllProduct);
+        setError(null);
+      } catch (err) {
+        setError("Error loading products: " + err.message);
+        console.error("Error initializing products:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeProducts();
+  }, [getAllProduct]);
+
+  // Handle image loading errors
   const handleImageError = (id) => {
     setImageError(prev => ({
       ...prev,
@@ -58,6 +95,7 @@ const AllProducts = () => {
     }));
   };
 
+  // Handle price range changes
   const handlePriceChange = (e) => {
     const value = parseInt(e.target.value);
     setPriceRange(prev => ({
@@ -68,46 +106,52 @@ const AllProducts = () => {
 
   // Filter and sort products
   useEffect(() => {
-    let result = [...getAllProduct];
-    
-    // Apply filters
-    if (selectedCategory !== "all") {
-      result = result.filter((item) => item.category === selectedCategory);
+    if (!getAllProduct || getAllProduct.length === 0) return;
+
+    try {
+      let result = [...getAllProduct];
+      
+      if (selectedCategory !== "all") {
+        result = result.filter((item) => item.category === selectedCategory);
+      }
+
+      if (selectedRating > 0) {
+        result = result.filter((item) => item.rating >= selectedRating);
+      }
+
+      result = result.filter(
+        (item) => item.price >= priceRange.min && item.price <= priceRange.max
+      );
+
+      if (minDiscount > 0) {
+        result = result.filter((item) => (item.discount || 0) >= minDiscount);
+      }
+
+      switch (sortOption) {
+        case "price-asc":
+          result.sort((a, b) => a.price - b.price);
+          break;
+        case "price-desc":
+          result.sort((a, b) => b.price - a.price);
+          break;
+        case "rating-desc":
+          result.sort((a, b) => b.rating - a.rating);
+          break;
+        case "rating-asc":
+          result.sort((a, b) => a.rating - b.rating);
+          break;
+        default:
+          break;
+      }
+
+      setFilteredProducts(result);
+    } catch (err) {
+      console.error("Error filtering products:", err);
+      toast.error("Error filtering products");
     }
-
-    if (selectedRating > 0) {
-      result = result.filter((item) => item.rating >= selectedRating);
-    }
-
-    result = result.filter(
-      (item) => item.price >= priceRange.min && item.price <= priceRange.max
-    );
-
-    if (minDiscount > 0) {
-      result = result.filter((item) => (item.discount || 0) >= minDiscount);
-    }
-
-    // Apply sorting
-    switch (sortOption) {
-      case "price-asc":
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case "price-desc":
-        result.sort((a, b) => b.price - a.price);
-        break;
-      case "rating-desc":
-        result.sort((a, b) => b.rating - a.rating);
-        break;
-      case "rating-asc":
-        result.sort((a, b) => a.rating - b.rating);
-        break;
-      default:
-        break;
-    }
-
-    setFilteredProducts(result);
   }, [getAllProduct, selectedCategory, selectedRating, priceRange, minDiscount, sortOption]);
 
+  // Reset all filters
   const resetFilters = () => {
     setSelectedCategory("all");
     setSelectedRating(0);
@@ -147,6 +191,55 @@ const AllProducts = () => {
     }
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="flex flex-col items-center gap-4">
+            <Loader className="w-8 h-8 animate-spin text-blue-600" />
+            <p className="text-gray-600">Loading products...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No products found
+  if (filteredProducts.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center py-12">
+          <p className="text-gray-600 mb-4">No products found matching your criteria</p>
+          <button 
+            onClick={resetFilters}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Reset Filters
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Categories at the top */}
