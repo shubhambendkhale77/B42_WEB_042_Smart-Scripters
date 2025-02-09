@@ -1,73 +1,47 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { AuthContext } from "../../context/useAuth";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { addToCart, deleteFromCart } from "../../redux/CartSlice";
-import { addToWishlist,removeFromWishlist } from "../../redux/wishlistReducer"; 
-import { Heart } from "lucide-react";
+import { addToWishlist, removeFromWishlist } from "../../redux/wishlistReducer";
+import { Heart, ShoppingCart, Trash2, Star, Sparkles } from "lucide-react";
+import { AuthContext } from "../../context/useAuth";
 
 const PageProductCard = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const context = useContext(AuthContext);
   const { getAllProduct } = context;
 
   const cartItems = useSelector((state) => state.cart) || [];
   const wishlistItems = useSelector((state) => state.wishlist.wishlistItems) || [];
-  const dispatch = useDispatch();
+  
+  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [imageError, setImageError] = useState({});
+
+  const handleImageError = (id) => {
+    setImageError((prev) => ({ ...prev, [id]: true }));
+  };
 
   const addCart = (item) => {
     dispatch(addToCart(item));
-    toast.success("Added to cart", {
-      icon: "🛍️",
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-      },
-    });
+    toast.success("Added to cart", { icon: "🛍️" });
   };
 
   const deleteCart = (item) => {
     dispatch(deleteFromCart(item));
-    toast.success("Removed from cart", {
-      icon: "🗑️",
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-      },
-    });
+    toast.success("Removed from cart", { icon: "🗑️" });
   };
 
   const toggleWishlist = (item) => {
     if (wishlistItems.some((p) => p.id === item.id)) {
       dispatch(removeFromWishlist(item.id));
-      toast.success("Removed from wishlist", {
-        icon: "💔",
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+      toast.success("Removed from wishlist", { icon: "💔" });
     } else {
       dispatch(addToWishlist(item));
-      toast.success("Added to wishlist", {
-        icon: "❤️",
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+      toast.success("Added to wishlist", { icon: "❤️" });
     }
   };
-
-  useEffect(() => {
-    console.log("homePageproduct component rendered");
-  }, []);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -75,73 +49,74 @@ const PageProductCard = () => {
 
   return (
     <div className="mt-10 px-6">
-      {/* Heading */}
-      <h1 className="text-center mb-6 text-3xl font-bold text-gray-900">
-        Bestselling Products
-      </h1>
+      <h1 className="text-center mb-6 text-3xl font-bold text-gray-900">Bestselling Products</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {getAllProduct.slice(0, 8).map((item) => {
+          const { id, title, price, productImageUrl, discount, rating } = item;
+          const isInCart = cartItems.some((p) => p.id === id);
+          const isInWishlist = wishlistItems.some((p) => p.id === id);
+          const isHovered = hoveredProduct === id;
 
-      {/* Product List */}
-      <section className="text-gray-600 body-font">
-        <div className="container mx-auto py-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {getAllProduct?.slice(0, 8).map((item, index) => {
-              const { id, title, price, productImageUrl } = item;
-              const isWishlisted = wishlistItems.some((p) => p.id === id);
-              return (
-                <div key={index} className="p-4 relative">
-                  <div className="h-full border border-gray-300 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 cursor-pointer bg-white">
-                    {/* Wishlist Heart Icon */}
-                    <div
-                      className="absolute top-8 right-8 cursor-pointer text-gray-500 hover:text-red-500"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent navigation on click
-                        toggleWishlist(item);
-                      }}
-                    >
-                      <Heart fill={isWishlisted ? "red" : "none"} stroke={isWishlisted ? "red" : "black"} size={24} />
-                    </div>
-                    
-                    <div className="h-80 flex justify-center items-center bg-gray-100">
-                      <img
-                        onClick={() => navigate(`/productinfo/${id}`)}
-                        className="h-full w-full object-contain p-4 "
-                        src={productImageUrl}
-                        alt="product"
-                      />
-                    </div>
-                    <div className="p-4 text-center">
-                      <h1 className="text-lg font-semibold text-gray-900 truncate">
-                        {title.substring(0, 25)}
-                      </h1>
-                      <h1 className="text-xl font-bold text-gray-600 mt-1">
-                        ₹{price}
-                      </h1>
-                      <div className="mt-3">
-                        {cartItems.some((p) => p.id === item.id) ? (
-                          <button
-                            onClick={() => deleteCart(item)}
-                            className="w-full mt-3 py-2 bg-red-700 text-white rounded-b-2xl font-semibold transition-all duration-300 hover:bg-red-600 active:scale-95"
-                          >
-                            Remove From Cart
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => addCart(item)}
-                            className="w-full mt-3 py-2 bg-purple-700 text-white rounded-b-2xl font-semibold transition-all duration-300 hover:bg-pink-600 active:scale-95"
-                          >
-                            Add To Cart
-                          </button>
-                          
-                        )}
-                      </div>
-                    </div>
+          return (
+            <div 
+              key={id} 
+              className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+              onMouseEnter={() => setHoveredProduct(id)}
+              onMouseLeave={() => setHoveredProduct(null)}
+            >
+              <div className="relative h-72 cursor-pointer overflow-hidden" onClick={() => navigate(`/productinfo/${id}`)}>
+                {!imageError[id] ? (
+                  <img
+                    src={productImageUrl}
+                    alt={title}
+                    onError={() => handleImageError(id)}
+                    className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 blur-sm brightness-75' : 'scale-100'}`}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <span className="text-gray-400">Image not available</span>
+                  </div>
+                )}
+                <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+                  <div className="text-white text-lg font-medium flex items-center gap-2">
+                    <Sparkles className="h-5 w-5" />
+                    View Details
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+                {discount && (
+                  <div className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-medium">
+                    {discount}% OFF
+                  </div>
+                )}
+                <div className="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1.5 rounded-xl text-sm font-medium flex items-center gap-1.5">
+                  <Star className="h-4 w-4 fill-current" />
+                  {rating}
+                </div>
+              </div>
+              <div className="p-6">
+                <h2 className="text-lg font-semibold mb-3 text-gray-800 line-clamp-2 min-h-[3.5rem]">{title}</h2>
+                <div className="flex items-center justify-between mb-6">
+                  <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">₹{price.toLocaleString()}</span>
+                </div>
+                <div className="flex gap-3">
+                  {isInCart ? (
+                    <button onClick={() => deleteCart(item)} className="flex-1 flex items-center justify-center px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600">
+                      <Trash2 className="h-4 w-4" /> Remove
+                    </button>
+                  ) : (
+                    <button onClick={() => addCart(item)} className="flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700">
+                      <ShoppingCart className="h-4 w-4" /> Add to Cart
+                    </button>
+                  )}
+                  <button onClick={() => toggleWishlist(item)} className="p-3 border rounded-xl hover:bg-gray-50">
+                    <Heart className={`h-5 w-5 ${isInWishlist ? 'text-red-500 fill-red-500' : 'text-gray-400 hover:text-red-500'}`} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

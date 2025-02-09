@@ -15,6 +15,7 @@ import { FaRegUser, FaSignOutAlt } from "react-icons/fa";
 
 // Custom Hook
 import useLogout from "../../hooks/useLogout";
+import CategorySearch from "./Home/CategorySearch";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -64,7 +65,7 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop/Tablet Navigation */}
-      <nav className="hidden md:flex items-center justify-between p-4 bg-gradient-to-r from-blue-900 to-purple-900 shadow-lg sticky top-0 z-50">
+      <nav className="hidden md:flex items-center justify-between p-2 bg-gradient-to-r from-blue-900 to-purple-900 shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-4">
           <img
             src="https://i.ibb.co/WN7vgHrT/Shop-Smart1.png"
@@ -74,7 +75,7 @@ const Navbar = () => {
           />
         </div>
 
-        <div className="flex-1 mx-8 max-w-2xl relative">
+        {/* <div className="flex-1 mx-8 max-w-2xl relative">
           <div className="flex items-center bg-gray-100 dark:bg-transparent rounded-lg px-4 py-2">
             <FiSearch className="text-gray-5100" />
             <input
@@ -88,10 +89,11 @@ const Navbar = () => {
 
           {searchQuery && (
             <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-              {/* Auto-suggest items here */}
+               Auto-suggest items here 
             </div>
           )}
-        </div>
+        </div> */}
+        <div className="flex-1 mx-8 max-w-2xl relative"><CategorySearch/></div>
 
         <div className="relative flex items-center space-x-6">
           {navLinks.map((link) => (

@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from "firebase/firestore";
 import React, {
   createContext,
   useContext,
@@ -9,6 +9,8 @@ import React, {
   useMemo,
 } from "react";
 import { auth, db } from "../assets/Auth/firebase";
+
+import toast  from 'react-hot-toast';
 
 export const AuthContext = createContext();
 
@@ -95,23 +97,25 @@ export const AuthProvider = ({ children }) => {
 
   const deleteOrder = async (id) => {
     if (!id) {
-        toast.error("Invalid Order ID");
+      toast.error("❌ Invalid Order ID");
+        console.error("❌ Invalid Order ID");
         return;
     }
     setLoading(true);
     try {
         console.log("🗑️ Deleting Order ID:", id);
         await deleteDoc(doc(db, 'order', id));
-        toast.success("Order Deleted Successfully");
-        getAllOrderFunction();
+        console.log("✅ Order Deleted Successfully");
+        toast.success("✅ Order Deleted Successfully");
+
+        fetchOrders();  
     } catch (error) {
         console.error("❌ Error Deleting Order:", error);
-        toast.error("Failed to Delete Order");
+        ToastBar.error("❌ Error Deleting Order");
     } finally {
         setLoading(false);
     }
 };
-
 
   useEffect(() => {
     const authUnsubscribe = onAuthStateChanged(auth, (user) => {

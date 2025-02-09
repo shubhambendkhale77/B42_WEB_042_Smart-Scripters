@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Trash, Plus, Minus, ShoppingCart, CheckCircle } from "lucide-react";
+import {
+  Trash,
+  Plus,
+  Minus,
+  ShoppingCart,
+  CheckCircle,
+  ArrowLeft,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import {
   decrementQuantity,
@@ -10,7 +17,7 @@ import {
 import BuyNowModal from "../components/BuyNowModal";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { db } from "../assets/Auth/firebase";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart);
@@ -105,13 +112,24 @@ const CartPage = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
+    <div className="bg-gray-50 min-h-screen py-12 pt-[64px]">
       <div className="container mx-auto px-4 max-w-6xl">
-        <div className="flex items-center mb-8 space-x-4">
-          <ShoppingCart className="w-10 h-10 text-indigo-600" />
-          <h1 className="text-4xl font-bold text-gray-800">
-            Your Shopping Cart
-          </h1>
+        <div className="flex items-center justify-between mb-6">
+          <Link
+            to="/"
+            className="flex items-center text-red-500 hover:text-red-500 transition"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            <span className="text-sm font-medium">Continue Shopping</span>
+          </Link>
+        </div>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-2">
+            <ShoppingCart className="w-5 h-5 text-rose-500" />
+            <h1 className="text-xl font-bold text-gray-800">
+              Your Shopping Cart ({cartItems.length})
+            </h1>
+          </div>
         </div>
 
         {cartItems.length === 0 ? (
@@ -122,6 +140,12 @@ const CartPage = () => {
               className="mx-auto mb-6 w-auto h-25"
             />
             <p className="text-2xl text-gray-500">Your cart is empty</p>
+            <Link
+              to="/"
+              className="inline-flex items-center mt-5 px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 transition-colors"
+            >
+              Start Shopping
+            </Link>
           </div>
         ) : (
           <div className="grid md:grid-cols-3 gap-8">
