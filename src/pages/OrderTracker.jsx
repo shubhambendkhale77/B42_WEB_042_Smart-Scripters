@@ -12,29 +12,28 @@ const STATUS_STEPS = [
 ];
 
 const OrderTracker = () => {
-    const [currentStatus, setCurrentStatus] = useState(1);
-    const [eta, setEta] = useState(5);
-    const [deliveryPartner, setDeliveryPartner] = useState(null);
-    
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setCurrentStatus((prev) => Math.min(prev + 1, STATUS_STEPS.length));
-    
-        setEta((prevEta) => Math.max(prevEta - 1, 0)); // Ensure eta does not go negative
-    
-        if (currentStatus >= 4) {
-          setDeliveryPartner({
-            name: 'John Doe',
-            contact: '+1 234 567 890',
-            vehicle: 'Motorcycle #NY-4567',
-          });
-        }
-      }, 3000);
-    
-      return () => clearInterval(interval);
-    }, [currentStatus]); // Ensure eta updates correctly
-    
-    
+  const [currentStatus, setCurrentStatus] = useState(1);
+  const [eta, setEta] = useState(5);
+  const [deliveryPartner, setDeliveryPartner] = useState(null);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentStatus((prev) => Math.min(prev + 1, STATUS_STEPS.length));
+  
+      setEta((prevEta) => Math.max(prevEta - 1, 0)); // Ensure eta does not go negative
+  
+      if (currentStatus >= 4) {
+        setDeliveryPartner({
+          name: 'Veer Singh',
+          contact: '+91 9876543210',
+          vehicle: 'MH-45 N 6767',
+        });
+      }
+    }, 3000);
+  
+    return () => clearInterval(interval);
+  }, [currentStatus]);
+  
 
   return (
     <div className="p-8 sm:max-w-[90%] md:max-w-[75%] lg:max-w-[70%] xl:max-w-[55%] mx-auto dark:bg-gray-800 rounded-xl mt-6 mb-6 shadow-lg w-full sm:p-10 md:p-12 lg:p-16">
@@ -47,7 +46,8 @@ const OrderTracker = () => {
 
       <div className="flex flex-col items-center mt-8">
         <div className="relative w-full max-w-md">
-          <div className="absolute left-6 top-0 h-[90%] w-1 bg-gray-200 dark:bg-gray-600">
+          {/* Progress Line */}
+          <div className="absolute left-15.5 top-4 h-[90%] w-1 bg-gray-200 dark:bg-gray-600">
             <motion.div
               className="h-full bg-blue-700 origin-top"
               initial={{ scaleY: 0 }}
@@ -56,6 +56,7 @@ const OrderTracker = () => {
             />
           </div>
 
+          {/* Status Steps */}
           <div className="space-y-8 pl-10">
             {STATUS_STEPS.map((step, index) => (
               <motion.div
@@ -63,8 +64,9 @@ const OrderTracker = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.2, duration: 0.5 }}
-                className="relative flex items-start gap-4"
+                className="relative flex items-center gap-6"
               >
+                {/* Step Icon */}
                 <motion.div
                   initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
@@ -75,6 +77,7 @@ const OrderTracker = () => {
                   {step.icon}
                 </motion.div>
 
+                {/* Step Label */}
                 <div className="flex-1 mb-8">
                   <p
                     className={`text-lg font-semibold ${
