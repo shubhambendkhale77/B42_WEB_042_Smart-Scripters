@@ -32,7 +32,7 @@ const Coupons = () => {
     <div className="mt-12 mx-8 px-8 bg-gradient-to-t from-[#daecdf] to-pink-700 rounded-2xl py-10">
   <div className="px-6">
     <h2 className="font-bold text-2xl mb-6">
-      <Title text1={"Offers for"} text2={"You"} />
+      <Title text1={"Offers for You"} text2={""} />
     </h2>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">

@@ -51,7 +51,7 @@ const PageProductCard = () => {
     <div className="mt-10 px-6">
       <h1 className="text-center mb-6 text-3xl font-bold text-gray-900">Bestselling Products</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {getAllProduct.slice(0, 8).map((item) => {
+        {getAllProduct.slice(0, 4).map((item) => {
           const { id, title, price, productImageUrl, discount, rating } = item;
           const isInCart = cartItems.some((p) => p.id === id);
           const isInWishlist = wishlistItems.some((p) => p.id === id);
