@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Title = ({text1,text2}) => {
   return (
     <div className='inline-flex gap-2 items-center mb-3 text-2xl'>
-        <p className='capitalize text-gray-700 font-medium'>{text1} <span className='text-gray-500 '>{text2} </span></p>
+        <p className='capitalize text-white font-medium'>{text1} <span className='text-gray-500 '>{text2} </span></p>
         
     </div>
   )
@@ -29,7 +29,7 @@ const Coupons = () => {
    }
 
   return (
-    <div className="mt-12 mx-8 px-8 bg-gradient-to-t from-[#daecdf] to-pink-700 rounded-2xl py-10">
+    <div className="mt-12 mx-8 px-8 bg-gradient-to-b from-purple-500 to-purple-800 text-white rounded-2xl py-10">
   <div className="px-6">
     <h2 className="font-bold text-2xl mb-6">
       <Title text1={"Offers for You"} text2={""} />

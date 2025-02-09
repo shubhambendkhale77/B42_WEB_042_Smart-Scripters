@@ -13,14 +13,14 @@ const Features= () => {
   ];
 
   return (
-    <div className='bg-gradient-to-b from-blue-100 to-purple-600 pt-8 mr-10 ml-10 mt-12 rounded-2xl'>
+    <div className='bg-gradient-to-b from-orange-400 to-orange-700 text-white pt-8 mr-10 ml-10 mt-12 rounded-2xl'>
         <div className="container flex flex-col justify-around sm:flex-row  mx-auto pb-1  ">
         {icons.map((icon, index) => (
             <div key={index} className='py-6'>
                 <div className="flex flex-col items-center my-10 ">
                         <span className="text-5xl pb-4">{icon.icon}</span>
-                        <h3 className='text-gray-800 font-semibold'>{icon.title}</h3>
-                        <p className='text-gray-900 text-sm '>{icon.description}</p>
+                        <h3 className='text-white font-semibold'>{icon.title}</h3>
+                        <p className='text-black text-sm '>{icon.description}</p>
                 </div>
             </div>
         ))}

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Title = ({ text1, text2 }) => {
   return (
     <div className="inline-flex gap-2 items-center mb-3 text-2xl">
-      <p className="capitalize text-black font-medium">
+      <p className="capitalize text-white font-medium">
         {text1} <span className="text-gray-500 ">{text2} </span>
       </p>
     </div>
@@ -32,7 +32,7 @@ const FeaturedCategories = () => {
   }
 
   return (
-    <div className="mt-12 px-8 mr-8 ml-8 bg-gradient-to-b from-blue-100 to-purple-800 rounded-2xl py-8">
+    <div className="mt-12 px-8 mr-8 ml-8 bg-gradient-to-b from-green-400 to-green-700 text-white rounded-2xl py-8">
       <h2 className="text-xl md:text-2xl font-bold mb-8 ml-8">
         <Title text1={"Featured Categories"} text2={""} />
       </h2>
@@ -75,7 +75,7 @@ const FeaturedCategories = () => {
               <div className="flex items-center justify-center transition-transform duration-300 hover:scale-110 hover:translate-y-[-5px] hover:shadow-lg text-4xl w-20 h-20 rounded-full bg-green-100">
                 {category.icon}
               </div>
-              <p className="text-sm font-medium text-gray-700">
+              <p className="text-sm font-medium text-white">
                 {category.name}
               </p>
             </div>
