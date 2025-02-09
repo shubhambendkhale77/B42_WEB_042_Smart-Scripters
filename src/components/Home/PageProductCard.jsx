@@ -48,9 +48,9 @@ const PageProductCard = () => {
   }, [cartItems]);
 
   return (
-    <div className="mt-10 px-6">
+    <div className="mt-10 px-4 sm:px-6 lg:px-10 xl:px-16">
       <h1 className="text-center mb-6 text-3xl font-bold text-gray-900">Bestselling Products</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
         {getAllProduct.slice(0, 4).map((item) => {
           const { id, title, price, productImageUrl, discount, rating } = item;
           const isInCart = cartItems.some((p) => p.id === id);
@@ -64,7 +64,7 @@ const PageProductCard = () => {
               onMouseEnter={() => setHoveredProduct(id)}
               onMouseLeave={() => setHoveredProduct(null)}
             >
-              <div className="relative h-72 cursor-pointer overflow-hidden" onClick={() => navigate(`/productinfo/${id}`)}>
+              <div className="relative h-56 sm:h-64 md:h-72 lg:h-80 cursor-pointer overflow-hidden" onClick={() => navigate(`/productinfo/${id}`)}>
                 {!imageError[id] ? (
                   <img
                     src={productImageUrl}
@@ -93,7 +93,7 @@ const PageProductCard = () => {
                   {rating}
                 </div>
               </div>
-              <div className="p-6">
+              <div className="p-4 sm:p-6 md:p-8">
                 <h2 className="text-lg font-semibold mb-3 text-gray-800 line-clamp-2 min-h-[3.5rem]">{title}</h2>
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">₹{price.toLocaleString()}</span>
