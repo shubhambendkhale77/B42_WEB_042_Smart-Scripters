@@ -13,23 +13,22 @@ const STATUS_STEPS = [
 
 const OrderTracker = () => {
   const [currentStatus, setCurrentStatus] = useState(1);
-  const [eta, setEta] = useState(5);
+  const [eta, setEta] = useState(6);
   const [deliveryPartner, setDeliveryPartner] = useState(null);
   
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentStatus((prev) => Math.min(prev + 1, STATUS_STEPS.length));
   
-      setEta((prevEta) => Math.max(prevEta - 1, 0)); // Ensure eta does not go negative
-  
+      setEta((eta) => Math.max(1, Math.min(10, eta - Math.floor(Math.random() * 2)))); // Ensure eta stays between 1 and 10
       if (currentStatus >= 4) {
         setDeliveryPartner({
-          name: 'Veer Singh',
+          name: 'Shubham Bendkhale',
           contact: '+91 9876543210',
           vehicle: 'MH-45 N 6767',
         });
       }
-    }, 3000);
+    }, 30000);
   
     return () => clearInterval(interval);
   }, [currentStatus]);
