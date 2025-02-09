@@ -7,10 +7,8 @@ import img5 from '../../assets/Carousel/5.jpg';
 import img6 from '../../assets/Carousel/6.jpg';
 import img7 from '../../assets/Carousel/7.jpg';
 
-
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
   // Images array
   const images = [img1, img2, img3, img4, img5, img6, img7];
 
@@ -35,29 +33,32 @@ const Carousel = () => {
   }, []);
 
   return (
-    <div className="relative w-screen  overflow-hidden mt-[60px] rounded-2xl ">
-      {/* Image Wrapper */}
-      <div className="w-full h-full ">
-        <div
-          className="flex transition-transform duration-500"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {images.map((src, index) => (
-            <img
-              key={index}
-              src={src}
-              alt={`Slide ${index + 1}`}
-              className="w-screen h-full object-cover flex-shrink-0"
-              loading="lazy"
-            />
-          ))}
+    <div className="relative w-screen overflow-hidden mt-[60px] rounded-2xl">
+      {/* Outer Container with Padding */}
+      <div className="px-16">
+        {/* Inner Carousel Container */}
+        <div className="w-full h-full overflow-hidden rounded-2xl">
+          <div
+            className="flex transition-transform duration-1500"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {images.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt={`Slide ${index + 1}`}
+                className="w-full h-full object-cover flex-shrink-0"
+                loading="lazy"
+              />
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Previous Button */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-4 text-white p-2 bg-black bg-opacity-50 rounded-full transform -translate-y-1/2"
+        className="absolute top-1/2 left-8 text-black/50 p-2 bg-black/0 bg-opacity-50 rounded-full transform -translate-y-1/2"
       >
         ❮
       </button>
@@ -65,10 +66,23 @@ const Carousel = () => {
       {/* Next Button */}
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-4 text-white p-2 bg-black bg-opacity-50 rounded-full transform -translate-y-1/2"
+        className="absolute top-1/2 right-8 text-black/50 p-2 bg-black/0 bg-opacity-50 rounded-full transform -translate-y-1/2"
       >
         ❯
       </button>
+
+      {/* Indicators */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-3 h-3 rounded-full ${
+              index === currentIndex ? 'bg-white' : 'bg-gray-900'
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

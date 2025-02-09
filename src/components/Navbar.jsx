@@ -66,13 +66,13 @@ const Navbar = () => {
   return (
     <>
       {/* Desktop/Tablet Navigation */}
-      <nav className="hidden md:flex items-center justify-between p-2 bg-gradient-to-r from-purple-700 to-blue-500 shadow-lg sticky top-0 z-50">
+      <nav className="hidden md:flex items-center justify-between p-2 bg-gradient-to-t from-transparent to-transparent shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-4">
           <img
             src="https://i.ibb.co/WN7vgHrT/Shop-Smart1.png"
             alt="Shop-Smart"
             onClick={() => navigate("/")} 
-            className="h-10 w-auto hover:scale-110 transition-transform"
+            className="h-10 w-auto hover:scale-110 transition-transform ml-3"
           />
         </div>
         <SearchBar/>
@@ -85,8 +85,8 @@ const Navbar = () => {
   className={({ isActive }) =>
     `relative flex items-center space-x-2 p-2 rounded-lg transition-colors ${
       isActive
-        ? "text-blue-600 dark:text-white"
-        : "text-gray-600 dark:text-white"
+        ? "text-blue-600 dark:text-black"
+        : "text-gray-600 dark:text-black"
     }`
   }
   onClick={link.onClick}
@@ -96,7 +96,7 @@ const Navbar = () => {
       {isActive && (
         <motion.div
           layoutId="activeNav"
-          className="absolute inset-0 bg-blue-900 dark:bg-purple-600 rounded-lg"
+          className="absolute inset-0 bg-blue-900 dark:bg-black/10 rounded-lg"
           transition={{
             type: "spring",
             stiffness: 500,
