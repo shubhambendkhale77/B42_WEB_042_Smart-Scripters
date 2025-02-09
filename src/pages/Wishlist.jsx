@@ -146,7 +146,7 @@ const WishlistItem = ({ item, onRemove, onAddToCart }) => (
         <span className="text-xl text-blue-700 font-bold">₹{item.price.toLocaleString("en-IN")}</span>
         <button
           onClick={() => onAddToCart(item)}
-          className="cursor-pointer flex items-center gap-2 bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition-colors duration-300"
+          className="cursor-pointer flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition-colors duration-300"
         >
           <ShoppingCart className="w-4 h-4" />
           Add
