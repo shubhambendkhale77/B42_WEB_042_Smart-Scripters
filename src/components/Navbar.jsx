@@ -164,7 +164,7 @@ const Navbar = () => {
 
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="p-3 bg-blue-400 dark:text-gray-100"
+            className="cursor-pointer p-3 bg-blue-400 dark:text-gray-100 rounded-lg" 
           >
             <FiMenu />
           </button>

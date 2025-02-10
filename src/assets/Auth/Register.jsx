@@ -263,14 +263,14 @@ const Register = () => {
             <p>By creating an account, you agree to our</p>
             <div className="space-x-2">
               <a
-                href="/terms"
+                href="/"
                 className="text-purple-600 hover:text-purple-700 hover:underline"
               >
                 Terms of Service
               </a>
               <span>&</span>
               <a
-                href="/privacy"
+                href="/"
                 className="text-purple-600 hover:text-purple-700 hover:underline"
               >
                 Privacy Policy
