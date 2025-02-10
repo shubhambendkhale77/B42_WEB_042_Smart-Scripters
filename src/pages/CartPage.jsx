@@ -19,12 +19,12 @@ import {
 import BuyNowModal from "../components/BuyNowModal";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { db } from "../assets/Auth/firebase";
-import { Navigate, Link } from "react-router-dom";
+import { Navigate, Link, useNavigate } from "react-router-dom";
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-
+ const navigate = useNavigate();
   const deleteCart = (item) => {
     dispatch(deleteFromCart(item));
     toast.success("Item removed from cart", {
@@ -108,6 +108,7 @@ const CartPage = () => {
         mobileNumber: "",
       });
       toast.success("Order Placed Successfull");
+      navigate('/OrderTracker');
     } catch (error) {
       console.log(error);
     }

@@ -13,11 +13,10 @@ import {
 import { FaRegUser, FaSignOutAlt } from "react-icons/fa";
 import SearchBar from "../components/SearchBar";
 import img from '../assets/logo-transparent-png.png'
-// Custom Hook
 import useLogout from "../../hooks/useLogout";
 import { useAuth } from "../context/useAuth";
 import CategorySearch from "./Home/CategorySearch";
-// import {} from '../assets/logo.png'
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -48,7 +47,6 @@ const Navbar = () => {
     } else if (currentUser) {
       return [
         ...commonLinks,
-        // { path: "/orders", name: "Orders", icon: <FiPackage /> },
         { path: "/user-dashboard", name: "Profile", icon: <FaRegUser /> },
         {
           path: "/logout",
@@ -67,19 +65,20 @@ const Navbar = () => {
   };
 
   const navLinks = getNavLinks();
-  console.log("navLinks:", navLinks);
 
   return (
     <>
       {/* Desktop/Tablet Navigation */}
       <nav className="hidden md:flex items-center justify-between p-4 bg-gray-300 shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-4">
-          <img
-            src={img}
-            alt="Shop-Smart"
-            onClick={() => navigate("/")}
-            className="h-10 w-auto hover:scale-110 transition-transform ml-3"
-          />
+          <div className="flex items-center">
+            <img
+              src={img}
+              alt="Shop-Smart-logo"
+              onClick={() => navigate("/")}
+              className="h-16 w-auto cursor-pointer transform hover:scale-105 transition-all duration-300 hover:brightness-110 rounded-lg shadow-md hover:shadow-lg"
+            />
+          </div>
         </div>
         <SearchBar />
 
@@ -91,7 +90,7 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `relative flex items-center space-x-2 p-2 rounded-lg transition-colors ${
                   isActive
-                    ? " font-medium  text-blue-700"
+                    ? "font-medium text-blue-700"
                     : "font-medium text-black-500"
                 }`
               }
@@ -122,7 +121,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden fixed bg-gray-300 top-0 w-full  z-50">
+      <nav className="md:hidden fixed bg-gray-300 top-0 w-full z-50">
         <div className="relative flex justify-around items-center p-2">
           {navLinks.slice(0, 4).map((link) => (
             <NavLink
@@ -131,7 +130,7 @@ const Navbar = () => {
               className={({ isActive }) =>
                 `relative p-3 rounded-full ${
                   isActive
-                    ? " font-medium  text-blue-700"
+                    ? "font-medium text-blue-700"
                     : "font-medium text-black-500"
                 }`
               }
@@ -157,7 +156,7 @@ const Navbar = () => {
 
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="p-3  bg-blue-400  dark:text-gray-100"
+            className="p-3 bg-blue-400 dark:text-gray-100"
           >
             <FiMenu />
           </button>
