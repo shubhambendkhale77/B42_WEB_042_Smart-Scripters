@@ -125,10 +125,10 @@ const AddProductPage = () => {
                                         src={product.productImageUrl}
                                         alt="Product preview"
                                         className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                            e.target.src = '/api/placeholder/128/128';
-                                            toast.error('Failed to load image');
-                                        }}
+                                        // onError={(e) => {
+                                        //     e.target.src = '/api/placeholder/128/128';
+                                        //     toast.error('Failed to load image');
+                                        // }}
                                     />
                                 </div>
                             )}
