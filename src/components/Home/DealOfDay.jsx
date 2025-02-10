@@ -142,7 +142,7 @@ const DealOfDay = () => {
                     ) : (
                       <button 
                         onClick={() => addCart(item)}
-                        className="flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700"
+                        className="cursor-pointer flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700"
                       >
                         <ShoppingCart className="h-5 w-5" />
                         <span className="text-sm sm:text-base font-medium">Add to Cart</span>
@@ -150,7 +150,7 @@ const DealOfDay = () => {
                     )}
                     <button 
                       onClick={() => toggleWishlist(item)}
-                      className="p-3 border-2 rounded-xl hover:bg-gray-50 transition-colors"
+                      className="cursor-pointer p-3 border-2 rounded-xl hover:bg-gray-50 transition-colors"
                     >
                       <Heart 
                         className={`h-6 w-6 ${

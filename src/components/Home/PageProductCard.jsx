@@ -104,11 +104,11 @@ const PageProductCard = () => {
                       <Trash2 className="h-4 w-4" /> Remove
                     </button>
                   ) : (
-                    <button onClick={() => addCart(item)} className="flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700">
+                    <button onClick={() => addCart(item)} className="cursor-pointer flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700">
                       <ShoppingCart className="h-4 w-4" /> Add to Cart
                     </button>
                   )}
-                  <button onClick={() => toggleWishlist(item)} className="p-3 border rounded-xl hover:bg-gray-50">
+                  <button onClick={() => toggleWishlist(item)} className="cursor-pointer p-3 border rounded-xl hover:bg-gray-50">
                     <Heart className={`h-5 w-5 ${isInWishlist ? 'text-red-500 fill-red-500' : 'text-gray-400 hover:text-red-500'}`} />
                   </button>
                 </div>

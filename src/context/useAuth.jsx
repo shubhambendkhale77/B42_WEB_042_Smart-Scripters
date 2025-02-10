@@ -9,8 +9,7 @@ import React, {
   useMemo,
 } from "react";
 import { auth, db } from "../assets/Auth/firebase";
-
-import toast  from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export const AuthContext = createContext();
 
@@ -23,35 +22,29 @@ export const AuthProvider = ({ children }) => {
   const [getAllOrder, setGetAllOrder] = useState([]);
   const [getAllUser, setGetAllUser] = useState([]);
 
-  // ✅ Fetch Users Function (Handles Missing "time" Field)
+  // ✅ Fetch Users Function
   const getAllUserFunction = async () => {
     setLoading(true);
     try {
-      console.log("🔍 Fetching Users from Firestore...");
-  
-      // 🔥 Updated to "Users" (Case-Sensitive)
+      // console.log("🔍 Fetching Users from Firestore...");
       const q = query(collection(db, "Users")); 
       const data = onSnapshot(q, (QuerySnapshot) => {
-        console.log("📩 Query Snapshot Received:", QuerySnapshot.size);
-  
+        // console.log("📩 Query Snapshot Received:", QuerySnapshot.size);
         let userArray = [];
         QuerySnapshot.forEach((doc) => {
-          console.log("📜 User Doc:", doc.data()); 
+          // console.log("📜 User Doc:", doc.data()); 
           userArray.push({ ...doc.data(), id: doc.id });
         });
-  
         setGetAllUser(userArray);
-        console.log("🔥 Fetched Users:", userArray);
+        // console.log("🔥 Fetched Users:", userArray);
         setLoading(false);
       });
-  
       return () => data;
     } catch (error) {
-      console.error("❌ Error fetching users:", error);
+      // console.error("❌ Error fetching users:", error);
       setLoading(false);
     }
   };
-  
 
   // ✅ Fetch Products Function
   const fetchProducts = useCallback(() => {
@@ -62,13 +55,12 @@ export const AuthProvider = ({ children }) => {
           ...doc.data(),
           id: doc.id,
         }));
-        console.log("✅ Fetched Products:", productArray);
+        // console.log("✅ Fetched Products:", productArray);
         setGetAllProduct(productArray);
       });
-
       return unsubscribe;
     } catch (error) {
-      console.error("🚨 Error fetching products:", error);
+      // console.error("🚨 Error fetching products:", error);
       return () => {};
     }
   }, []);
@@ -82,14 +74,13 @@ export const AuthProvider = ({ children }) => {
           ...doc.data(),
           id: doc.id,
         }));
-        console.log("✅ Fetched Orders:", orderArray);
+        // console.log("✅ Fetched Orders:", orderArray);
         setGetAllOrder(orderArray);
         setLoading(false);
       });
-
       return unsubscribe;
     } catch (error) {
-      console.error("🚨 Error fetching orders:", error);
+      // console.error("🚨 Error fetching orders:", error);
       setLoading(false);
       return () => {};
     }
@@ -98,42 +89,64 @@ export const AuthProvider = ({ children }) => {
   const deleteOrder = async (id) => {
     if (!id) {
       toast.error("❌ Invalid Order ID");
-        console.error("❌ Invalid Order ID");
-        return;
+      // console.error("❌ Invalid Order ID");
+      return;
     }
     setLoading(true);
     try {
-        console.log("🗑️ Deleting Order ID:", id);
-        await deleteDoc(doc(db, 'order', id));
-        console.log("✅ Order Deleted Successfully");
-        toast.success("✅ Order Deleted Successfully");
-
-        fetchOrders();  
+      // console.log("🗑️ Deleting Order ID:", id);
+      await deleteDoc(doc(db, 'order', id));
+      // console.log("✅ Order Deleted Successfully");
+      toast.success("✅ Order Deleted Successfully");
+      fetchOrders();  
     } catch (error) {
-        console.error("❌ Error Deleting Order:", error);
-        ToastBar.error("❌ Error Deleting Order");
+      // console.error("❌ Error Deleting Order:", error);
+      toast.error("❌ Error Deleting Order");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
+
+  // ✅ Check Authentication Status
+  const updateAuthState = useCallback((user) => {
+    // Check for admin login
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    const adminToken = localStorage.getItem('adminToken');
+
+    if (isAdmin && adminToken === 'admin-token-123') {
+      // Admin is logged in
+      setCurrentUser({
+        email: 'shubham@admin.com',
+        isAdmin: true,
+        adminToken
+      });
+    } else if (user) {
+      // Regular user is logged in via Firebase
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      setCurrentUser({
+        ...user,
+        ...userData,
+        isAdmin: false
+      });
+    } else {
+      // No user is logged in
+      setCurrentUser(null);
+    }
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
-    const authUnsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      console.log("🔄 User State Updated:", user);
-      setLoading(false);
-    });
-
+    const authUnsubscribe = onAuthStateChanged(auth, updateAuthState);
     const productUnsubscribe = fetchProducts();
     const orderUnsubscribe = fetchOrders();
-    getAllUserFunction(); // Fetch users
+    getAllUserFunction();
 
     return () => {
       authUnsubscribe();
       productUnsubscribe();
       orderUnsubscribe();
     };
-  }, [fetchProducts, fetchOrders]);
+  }, [fetchProducts, fetchOrders, updateAuthState]);
 
   // ✅ Context Value
   const value = useMemo(
