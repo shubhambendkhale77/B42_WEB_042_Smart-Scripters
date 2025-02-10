@@ -24,6 +24,9 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  const isAuthenticated =
+    localStorage.getItem("userToken") || localStorage.getItem("adminToken");
   // Define navigation links based on authentication status
   const getNavLinks = () => {
     const commonLinks = [
@@ -33,7 +36,8 @@ const Navbar = () => {
       { path: "/cart", name: "Cart", icon: <FiShoppingCart /> },
     ];
 
-    if (currentUser?.isAdmin) {
+    // Check if currentUser exists and has isAdmin property set to true
+    if (isAdmin === true) {
       return [
         ...commonLinks,
         { path: "/admin-dashboard", name: "Admin", icon: <FaRegUser /> },
@@ -66,17 +70,21 @@ const Navbar = () => {
 
   const navLinks = getNavLinks();
 
+  // Add console log to debug currentUser and isAdmin status
+  // console.log('Current User:', currentUser);
+  // console.log('Is Admin:', currentUser?.isAdmin);
+
   return (
     <>
       {/* Desktop/Tablet Navigation */}
-      <nav className="hidden md:flex items-center justify-between p-4 bg-gray-300 shadow-lg sticky top-0 z-50">
+      <nav className="hidden md:flex items-center justify-between p-1 bg-gray-300 shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-4">
           <div className="flex items-center">
             <img
               src={img}
               alt="Shop-Smart-logo"
               onClick={() => navigate("/")}
-              className="h-16 w-auto cursor-pointer transform hover:scale-105 transition-all duration-300 hover:brightness-110 rounded-lg shadow-md hover:shadow-lg"
+              className="h-16 w-23 cursor-pointer transform hover:scale-105 transition-all duration-300 hover:brightness-110  hover:shadow-lg"
             />
           </div>
         </div>

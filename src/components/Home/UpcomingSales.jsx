@@ -160,7 +160,7 @@ const UpcomingSales = () => {
                   <div className="flex gap-3">
                     <button
                       onClick={() => handleCartAction(product)}
-                      className={`flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 ${
+                      className={`cursor-pointer flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 ${
                         isInCart
                           ? 'bg-red-500 hover:bg-red-600 text-white'
                           : 'bg-indigo-600 hover:bg-indigo-700 text-white'
@@ -180,10 +180,10 @@ const UpcomingSales = () => {
                     </button>
                     <button
                       onClick={() => handleWishlistAction(product)}
-                      className="p-1.5 border rounded-lg hover:bg-gray-50 transition-colors"
+                      className="cursor-pointer p-1.5 border rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       <Heart
-                        className={`h-5 w-5 ${
+                        className={`h-5 w-8 ${
                           isInWishlist ? 'text-red-500 fill-red-500' : 'text-gray-400'
                         }`}
                       />

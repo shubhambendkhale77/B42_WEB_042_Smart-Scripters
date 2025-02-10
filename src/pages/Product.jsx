@@ -243,24 +243,29 @@ const AllProducts = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Categories at the top */}
-      <div className="mb-8">
-        <div className="flex gap-3 pb-2 overflow-x-auto scrollbar-hide">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`
-                whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium
-                transition-all duration-200 transform hover:scale-105
-                ${selectedCategory === category
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                  : "bg-white text-gray-700 border border-gray-200 hover:border-blue-400"}
-              `}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
+      <div className="cursor-pointer mb-8">
+      <div className="cursor-pointer flex gap-3 pb-2">
+  {categories.map((category) => {
+    const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+    return (
+      <button
+        key={category}
+        onClick={() => setSelectedCategory(category)}
+        className={`cursor-pointer
+          whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium
+          transition-all duration-200 transform hover:scale-105
+          ${selectedCategory === category
+            ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+            : "bg-white text-gray-700 border border-gray-200 hover:border-blue-400"}
+        `}
+      >
+        {formattedCategory}
+      </button>
+    );
+  })}
+</div>
+
+
       </div>
 
       {/* Filter and Sort Controls */}
@@ -268,7 +273,7 @@ const AllProducts = () => {
         <div className="flex items-center gap-4">
           <button 
             onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg 
+            className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg 
                      shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-colors duration-200"
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -277,7 +282,7 @@ const AllProducts = () => {
 
           {/* Sort Dropdown */}
           <Menu as="div" className="relative">
-            <Menu.Button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 
+            <Menu.Button className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 
                                   rounded-lg hover:border-blue-400 transition-colors duration-200">
               <ArrowUpDown className="w-4 h-4" />
               Sort by
@@ -495,16 +500,14 @@ const AllProducts = () => {
                   ) : (
                     <button 
                       onClick={() => addCart(item)}
-                      className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 
-                               text-white rounded-lg hover:bg-blue-700 flex-grow transition-colors
-                               shadow-lg shadow-blue-500/30"
+                      className="cursor-pointer flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700"
                     >
                       <ShoppingCart className="w-4 h-4" /> Add to Cart
                     </button>
                   )}
                   <button 
                     onClick={() => handleAddToWishlist(item)}
-                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                    className="cursor-pointer p-2 text-gray-400 hover:text-red-500 transition-colors"
                   >
                     <Heart className="w-6 h-6" />
                   </button>
