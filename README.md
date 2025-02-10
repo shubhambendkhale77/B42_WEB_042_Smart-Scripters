@@ -136,7 +136,7 @@ Follow these steps to install and run the project locally.
 git clone https://github.com/shubhambendkhale77/B42_WEB_042_Smart-Scripters
 
 # Install dependencies
-cd B42_WEB_042_Smart-Scripters
+cd ShopSmart
 npm install
 
 # Start frontend
