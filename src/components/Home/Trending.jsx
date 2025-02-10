@@ -90,7 +90,7 @@ const TrendingProducts = () => {
     <div className="mt-8 px-4 sm:px-6 md:px-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Trending Now</h1>
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <button
             onClick={prevSlide}
             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
@@ -103,7 +103,7 @@ const TrendingProducts = () => {
           >
             <ChevronRight className="h-5 w-5" />
           </button>
-        </div>
+        </div> */}
       </div>
 
       <div className="relative overflow-hidden">
@@ -182,11 +182,11 @@ const TrendingProducts = () => {
                         <span className="text-lg sm:text-xl font-bold text-indigo-600">₹{price.toLocaleString()}</span>
                       </div>
                       
-                      <div className="flex gap-2">
+                      <div className="flex gap-3">
                         {isInCart ? (
                           <button 
                             onClick={() => deleteCart(item)}
-                            className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                            className="flex-1 flex items-center justify-center px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600"
                           >
                             <Trash2 className="h-4 w-4" />
                             <span className="text-xs sm:text-sm">Remove</span>
@@ -194,7 +194,7 @@ const TrendingProducts = () => {
                         ) : (
                           <button 
                             onClick={() => addCart(item)}
-                            className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                            className="flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700"
                           >
                             <ShoppingCart className="h-4 w-4" />
                             <span className="text-xs sm:text-sm">Add to Cart</span>
@@ -202,10 +202,10 @@ const TrendingProducts = () => {
                         )}
                         <button 
                           onClick={() => toggleWishlist(item)}
-                          className="p-1.5 border rounded-lg hover:bg-gray-50 transition-colors"
+                          className="p-3 border rounded-xl hover:bg-gray-50 transition-colors"
                         >
                           <Heart 
-                            className={`h-5 w-5 ${
+                            className={`h-5 w-5  ${
                               isInWishlist ? 'text-red-500 fill-red-500' : 'text-gray-400'
                             }`}
                           />

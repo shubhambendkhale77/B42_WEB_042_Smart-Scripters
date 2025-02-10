@@ -17,6 +17,11 @@ const SearchBar = () => {
 
     const navigate = useNavigate();
 
+    const handleSelectProduct = (id) => {
+        setSearch(""); // Clear search box
+        navigate(`/productinfo/${id}`);
+    };
+
     return (
         <div className="relative w-96 lg:w-96 md:w-96 mx-auto">
             {/* Search Input with Icon */}
@@ -27,7 +32,7 @@ const SearchBar = () => {
                 {/* Input Field */}
                 <input
                     type="text"
-                    placeholder="Search here for exciting products"
+                    placeholder="Search"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="bg-transparent placeholder-black rounded-lg px-10 py-2 w-full outline-none text-black"
@@ -42,7 +47,7 @@ const SearchBar = () => {
                             <div
                                 key={index}
                                 className="py-2 px-2 cursor-pointer flex items-center gap-2 hover:bg-gray-300 rounded-md"
-                                onClick={() => navigate(`/productinfo/${item.id}`)}
+                                onClick={() => handleSelectProduct(item.id)}
                             >
                                 <img className="w-10" src={item.productImageUrl} alt="" />
                                 {item.title}

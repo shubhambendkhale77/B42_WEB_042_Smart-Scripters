@@ -29,10 +29,10 @@ const Coupons = () => {
    }
 
   return (
-    <div className="mt-12 mx-8 px-8 bg-gradient-to-b from-purple-500 to-purple-800 text-white rounded-2xl py-10">
+    <div className="mt-12 mx-8 px-8 bg-gradient-to-b from-red-300 to-purple-300 text-white rounded-2xl py-10">
   <div className="px-6">
     <h2 className="font-bold text-2xl mb-6">
-      <Title text1={"Offers for You"} text2={""} />
+    <Title text1={<span className="text-gray-800 font-bold text-3xl">Offers for You</span>} text2={""} />
     </h2>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
@@ -40,7 +40,7 @@ const Coupons = () => {
         <div key={index} className="p-2">
           <div 
             className="transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer rounded-xl shadow-md overflow-hidden bg-white p-3"
-            onClick={() => handleOffers(coupon.path)}
+            // onClick={() => handleOffers(coupon.path)}
           >
             <img 
               src={coupon.imgUrl} 

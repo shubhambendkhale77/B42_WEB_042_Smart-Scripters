@@ -72,7 +72,7 @@ const FeaturedCategories = () => {
               onClick={() => handleFeaturedCategory(category.path)}
               className="flex flex-col items-center p-4 w-40 h-40 cursor-pointer gap-2"
             >
-              <div className="flex shadow-xl items-center justify-center transition-transform duration-300 hover:scale-110 hover:translate-y-[-10px] hover:shadow-lg text-4xl w-20 h-20 rounded-full bg-green-100">
+              <div className="flex shadow-xl items-center justify-center transition-transform duration-300 hover:scale-110 hover:translate-y-[-10px] hover:shadow-lg text-4xl w-20 h-20 rounded-full bg-blue-200">
                 {category.icon}
               </div>
               <p className="text-sm font-medium shadow-2xl text-black">

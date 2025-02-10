@@ -13,7 +13,7 @@ const Features= () => {
   ];
 
   return (
-    <div className='bg-gradient-to-b from-orange-400 to-orange-700 text-white pt-8 mr-10 ml-10 mt-12 rounded-2xl'>
+    <div className='bg-gradient-to-b from-red-400 to-orange-300 text-white pt-8 mr-10 ml-10 mt-12 rounded-2xl'>
         <div className="container flex flex-col justify-around sm:flex-row  mx-auto pb-1  ">
         {icons.map((icon, index) => (
             <div key={index} className='py-6'>
