@@ -81,11 +81,12 @@ const UpdateProductPage = () => {
         try {
             await setDoc(doc(db, "products", id), product);
             toast.success("Product Updated Successfully");
-            getAllProductFunction();
             navigate("/admin-dashboard");
+            getAllProductFunction();
+          
         } catch (error) {
             console.error("Error updating product:", error);
-            toast.error("Failed to update product");
+            // toast.error("Failed to update product");
         } finally {
             setSaving(false);
         }
