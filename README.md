@@ -7,7 +7,7 @@ This project is a feature-rich multi-vendor e-commerce platform designed for sea
 Frontend
 
 ## Deployed App 🌐
-[https://b42-web-042-smart-scripters.vercel.app/](https://b42-web-042-smart-scripters.vercel.app/)  
+[https://shop-smart-blue.vercel.app/](https://shop-smart-blue.vercel.app/)  
 
 
 ## Directory Structure 📂
@@ -143,7 +143,7 @@ npm install
 npm run dev
 ```
 
-## Credentials ©🧔‍♂️
+## Credentials 🧔‍♂️
 Provide user credentials for authenticated pages.
 
 ```bash
@@ -151,8 +151,10 @@ Admin Login:
 Email: shubham@admin.com
 Password: shubham123
 
-Customer Login:
-Customers can Register and Login
+Customer Login: {Customers can Register and Login}
+Email: user@gmail.com
+Password: Password@123
+
 ```
 
 ## APIs Used 🧩
@@ -162,12 +164,6 @@ Customers can Register and Login
 - **Frontend:** React.js, Tailwind CSS, Redux 
 - **Database:** Firebase Firestore
 - **Authentication:** Firebase Auth
-
-## Web-App Preview 🖼️
-- **Home Page**
-- **Login Page**
-- **Register Page**
-- **Home Page**
 
 ## Web-App Preview 🎨
 
