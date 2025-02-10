@@ -18,7 +18,8 @@ const categoryList = [
     { name: 'electronics' },
     { name: 'grocery' },
     { name: 'kitchen' },
-    { name: 'beauty' }
+    { name: 'beauty' },
+    { name : 'sport'}
 ];
 
 const UpdateProductPage = () => {
