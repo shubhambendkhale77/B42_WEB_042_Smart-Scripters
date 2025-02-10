@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/useAuth";
-import { User, Package, Calendar, Mail, Star, CreditCard, ShoppingBag } from "lucide-react";
+import { User, Package, Calendar, Mail, Star, CreditCard, ShoppingBag, Trash2 } from "lucide-react";
 import { auth, db } from "../assets/Auth/firebase";
 import { useNavigate } from "react-router-dom";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 
 const UserDashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -10,6 +11,23 @@ const UserDashboard = () => {
   const userId = user?.uid || currentUser?.uid;
   const filteredOrders = getAllOrder.filter((obj) => obj.userid === userId);
   const navigate = useNavigate();
+
+  const handleRemoveOrder = async (orderId) => {
+    try {
+      // Find the order document reference
+      const orderRef = doc(db, "orders", orderId);
+      
+      // Delete the order
+      await deleteDoc(orderRef);
+      
+      // You might want to refresh the orders list or update the state
+      // This depends on how your AuthContext is set up
+      window.location.reload(); // Temporary solution - consider using a more elegant state update
+    } catch (error) {
+      console.error("Error removing order:", error);
+      alert("Failed to remove order. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 px-4 py-8">
@@ -41,10 +59,6 @@ const UserDashboard = () => {
                 <Mail className="w-5 h-5 text-purple-600" />
                 <span className="text-gray-800">{user?.email || currentUser?.email}</span>
               </div>
-              {/* <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                <Calendar className="w-5 h-5 text-blue-600" />
-                <span className="text-gray-800">{user?.date || "N/A"}</span>
-              </div> */}
             </div>
           </div>
         </div>
@@ -74,10 +88,9 @@ const UserDashboard = () => {
             {filteredOrders.map((order) =>
               order.cartItems.map((item, index) => (
                 <div
-                  onClick={() => navigate("/OrderTracker")}
                   key={index}
                   className="bg-gradient-to-r from-white to-indigo-50 rounded-xl border border-indigo-100 p-6 space-y-4 hover:shadow-lg transition-all duration-300"
-                 >
+                >
                   {/* Order Header */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div className="p-3 bg-white rounded-lg shadow-sm">
@@ -116,7 +129,19 @@ const UserDashboard = () => {
                         <p className="text-sm bg-indigo-100 px-3 py-1 rounded-full text-indigo-600">
                           Quantity: {item.quantity}
                         </p>
-                        <p className="font-bold text-lg text-indigo-800">₹ {item.price}</p>
+                        <div className="flex items-center gap-4">
+                          <p className="font-bold text-lg text-indigo-800">₹ {item.price}</p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveOrder(order.id);
+                            }}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                            title="Remove Order"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

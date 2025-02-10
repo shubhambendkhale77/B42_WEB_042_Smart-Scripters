@@ -1,60 +1,71 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff, Mail, Lock, LogIn, User, Shield } from 'lucide-react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from './firebase'; // Ensure Firestore is imported
-import { doc, getDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Eye, EyeOff, Mail, Lock, LogIn, User, Shield } from "lucide-react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "./firebase"; // Ensure Firestore is imported
+import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [loginType, setLoginType] = useState('user'); // 'user' or 'admin'
+  const [error, setError] = useState("");
+  const [loginType, setLoginType] = useState("user"); // 'user' or 'admin'
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
-      if (loginType === 'admin') {
+      if (loginType === "admin") {
         // 🔹 Admin Login with hardcoded credentials
-        if (email === 'shubham@admin.com' && password === 'shubham123') {
-          localStorage.setItem('isAdmin', 'true');
-          localStorage.setItem('adminToken', 'admin-token-123');
-          navigate('/admin-dashboard');
+        if (email === "shubham@admin.com" && password === "shubham123") {
+          localStorage.setItem("isAdmin", "true");
+          localStorage.setItem("adminToken", "admin-token-123");
+          navigate("/admin-dashboard");
         } else {
-          throw new Error('Invalid Admin Credentials');
+          throw new Error("Invalid Admin Credentials");
         }
       } else {
         // 🔹 Regular User Login with Firebase Authentication
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
         const user = userCredential.user;
 
         // Fetch user details from Firestore
-        const userRef = doc(db, 'Users', user.uid);
+        const userRef = doc(db, "Users", user.uid);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
           const userData = userSnap.data();
-          localStorage.setItem('user', JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            firstName: userData.firstName || '',
-            lastName: userData.lastName || '',
-            photoURL: user.photoURL || '',
-            accessToken: user.accessToken || '',
-          }));
-          navigate('/user-dashboard');
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              uid: user.uid,
+              email: user.email,
+              firstName: userData.firstName || "",
+              lastName: userData.lastName || "",
+              photoURL: user.photoURL || "",
+              accessToken: user.accessToken || "",
+            })
+          );
+          navigate("/user-dashboard");
         } else {
-          throw new Error('User data not found in Firestore');
+          throw new Error("User data not found in Firestore");
         }
       }
     } catch (error) {
-      setError(loginType === 'admin' ? 'Invalid Admin Credentials' : 'Invalid User Credentials');
+      setError(
+        loginType === "admin"
+          ? "Invalid Admin Credentials"
+          : "Invalid User Credentials"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -70,22 +81,22 @@ const Login = () => {
         {/* Admin/User Toggle Buttons */}
         <div className="flex gap-4 mb-8">
           <button
-            onClick={() => setLoginType('user')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-colors ${
-              loginType === 'user'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            onClick={() => setLoginType("user")}
+            className={`cursor-pointer flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-colors ${
+              loginType === "user"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
             <User size={20} />
             User
           </button>
           <button
-            onClick={() => setLoginType('admin')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-colors ${
-              loginType === 'admin'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            onClick={() => setLoginType("admin")}
+            className={`cursor-pointer flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-colors ${
+              loginType === "admin"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
             <Shield size={20} />
@@ -103,7 +114,7 @@ const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder={`${loginType === 'admin' ? 'Admin' : 'User'} Email`}
+              placeholder={`${loginType === "admin" ? "Admin" : "User"} Email`}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -114,7 +125,7 @@ const Login = () => {
               <Lock className="text-gray-400" size={20} />
             </div>
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
@@ -139,14 +150,14 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:opacity-90 transition-colors flex items-center justify-center gap-2"
+            className="cursor-pointer w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:opacity-90 transition-colors flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
             ) : (
               <>
                 <LogIn size={20} />
-                <span>Login as {loginType === 'admin' ? 'Admin' : 'User'}</span>
+                <span>Login as {loginType === "admin" ? "Admin" : "User"}</span>
               </>
             )}
           </button>

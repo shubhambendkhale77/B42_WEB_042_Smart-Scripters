@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Product from "../pages/Product";
 import Login from "../assets/Auth/Login";
-import Register from "../assets/Auth/Register"; 
+import Register from "../assets/Auth/Register";
 import PrivateRoute from "../Private/PrivateRoute";
 import ProductInfo from "../pages/ProductInfo";
 import CartPage from "../pages/CartPage";
@@ -21,18 +21,39 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/products" element={<PrivateRoute element={<Product />}/>} />
+      <Route path="/products" element={<Product />} />
       <Route path="/productinfo/:id" element={<ProductInfo />} />
-      <Route path="/wishlist" element={<Wishlist/>}/>
+      <Route
+        path="/wishlist"
+        element={<PrivateRoute element={<Wishlist />} />}
+      />
       <Route path="/productinfo" element={<ProductInfo />} />
-      <Route path="/cart" element={<CartPage />} />
-      <Route path="/admin-dashboard" element={<AdminDashboard />} />
-      <Route path="/user-dashboard" element={<UserDashBoard />} />
-      <Route path="/addproduct"  element={<AddProductPage />}  />
-      <Route path="/tracker"  element={<OrderTracker/>}  />
-      <Route path="/updateproduct/:id"element={<UpdateProductPage />} />
-      <Route path="/category/:categoryname" element={<CategoryPage/>}/>
-      <Route path="/OrderTracker" element={<OrderTracker/>}/>
+      <Route path="/cart" element={<PrivateRoute element={<CartPage />} />} />
+      <Route
+        path="/admin-dashboard"
+        element={<PrivateRoute element={<AdminDashboard />} />}
+      />
+      <Route
+        path="/user-dashboard"
+        element={<PrivateRoute element={<UserDashBoard />} />}
+      />
+      <Route
+        path="/addproduct"
+        element={<PrivateRoute element={<AddProductPage />} />}
+      />
+      <Route
+        path="/tracker"
+        element={<PrivateRoute element={<OrderTracker />} />}
+      />
+      <Route
+        path="/updateproduct/:id"
+        element={<PrivateRoute element={<UpdateProductPage />} />}
+      />
+      <Route path="/category/:categoryname" element={<CategoryPage />} />
+      <Route
+        path="/OrderTracker"
+        element={<PrivateRoute element={<OrderTracker />} />}
+      />
     </Routes>
   );
 };
