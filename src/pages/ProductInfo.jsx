@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../assets/Auth/firebase";
 import { AuthContext } from "../context/useAuth";
 import { addToCart, deleteFromCart } from "../redux/CartSlice";
+import { addToWishlist, removeFromWishlist } from "../redux/wishlistReducer";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { Heart, Share2, Truck, ShoppingCart, Loader2, ArrowLeft, Store } from "lucide-react";
@@ -12,9 +13,12 @@ import { motion } from "framer-motion";
 const ProductInfo = () => {
   const { loading, setLoading } = useContext(AuthContext);
   const [product, setProduct] = useState(null);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart);
+  const wishlistItems = useSelector((state) => state.wishlist.wishlistItems);
 
   const getProductData = async () => {
     if (!id) return;
@@ -39,8 +43,35 @@ const ProductInfo = () => {
     if (id) getProductData();
   }, [id]);
 
-  const cartItems = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
+  const isInWishlist = product 
+    ? wishlistItems.some((item) => item.id === product.id) 
+    : false;
+
+  const toggleWishlist = () => {
+    if (!product) return;
+
+    if (isInWishlist) {
+      dispatch(removeFromWishlist(product.id));
+      toast.success("Removed from wishlist", {
+        icon: "💔",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    } else {
+      dispatch(addToWishlist(product));
+      toast.success("Added to wishlist", {
+        icon: "❤️",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
+  };
 
   const addCart = (item) => {
     dispatch(addToCart(item));
@@ -64,21 +95,6 @@ const ProductInfo = () => {
         color: "#fff",
       },
     });
-  };
-
-  const toggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    toast.success(
-      isWishlisted ? "Removed from wishlist" : "Added to wishlist",
-      {
-        icon: isWishlisted ? "💔" : "❤️",
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      }
-    );
   };
 
   useEffect(() => {
@@ -136,7 +152,7 @@ const ProductInfo = () => {
           >
             <Heart
               className={`w-6 h-6 ${
-                isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
+                isInWishlist ? "fill-red-500 text-red-500" : "text-gray-600"
               }`}
             />
           </motion.button>
@@ -198,7 +214,7 @@ const ProductInfo = () => {
             {cartItems.some((p) => p.id === product.id) ? (
               <button
                 onClick={() => deleteCart(product)}
-                className="w-full flex items-center justify-center space-x-2 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors"
+                className="cursor-pointer flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-500 to-red-500 text-white rounded-xl hover:from-red-700 hover:to-red-700"
               >
                 <ShoppingCart className="w-5 h-5" />
                 <span>Remove from Cart</span>
