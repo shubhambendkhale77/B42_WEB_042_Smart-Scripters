@@ -110,8 +110,6 @@ Shop-Smart
 ## Video Walkthrough of the Project 🎥
 [Link to project walkthrough video](#)
 
-## Video Walkthrough of the Codebase 💻
-[Link to codebase walkthrough video](#)
 
 ## Features ⚙️
 - Multi-vendor product listing and management
@@ -133,8 +131,7 @@ Follow these steps to install and run the project locally.
 
 ```bash
 # Clone the repository
-git clone https://github.com/shubhambendkhale77/B42_WEB_042_Smart-Scripters
-
+https://github.com/shubhambendkhale77/ShopSmart.git
 # Install dependencies
 cd ShopSmart
 npm install
