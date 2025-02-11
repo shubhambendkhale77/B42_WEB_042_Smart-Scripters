@@ -108,7 +108,7 @@ Shop-Smart
 
 
 ## Video Walkthrough of the Project 🎥
-[Link to project walkthrough video](#)
+https://youtu.be/p6vo4MC416o?si=2dI-hATAFJZ45ekv
 
 
 ## Features ⚙️
